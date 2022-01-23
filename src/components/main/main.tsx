@@ -3,8 +3,8 @@ import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import './main.scss';
 
 import Home from './components/home/home';
-// import Garage from './components/garage/garage';
-// import Winners from './components/winners/winners';
+import Garage from './components/garage/garage';
+import Winners from './components/winners/winners';
 
 type Props = {
   activePage: {
@@ -45,13 +45,13 @@ export default function Main(props: Props) {
   //   favoriteFilter: true,
   // });
 
-  const pages = ['home', 'garage', 'winners'];
 
+  const pages = ['home', 'garage', 'winners'];
   return (
     <main className="main" id="main">
       {props.activePage.value === pages[0] && <Home activePage={props.activePage} />}
-      {/* {props.activePage.value === pages[1] && (<Garage />)} */}
-      {/* {props.activePage.value === pages[2] && (<Winners />)} */}
+      {props.activePage.value === pages[1] && (<Garage />)}
+      {props.activePage.value === pages[2] && (<Winners />)}
     </main>
   );
 }
