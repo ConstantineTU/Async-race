@@ -14,22 +14,33 @@ type Props = {
     value: carSelectType;
     setValue: React.Dispatch<React.SetStateAction<carSelectType>>;
   }
+  inputCreateRef: React.MutableRefObject<HTMLInputElement | null>
+  fetchCars: () => void;
 };
 
 
 export default function Tracks(props: Props) {
   const selectCar = () => {
+    props.inputCreateRef.current && props.inputCreateRef.current.focus()
     props.carSelectUpdate.setValue({
       name: props.carData.value[props.i].name,
       color: props.carData.value[props.i].color,
       id: props.carData.value[props.i].id,
     })
   }
+  const deleteCar = () => {
+    fetch(`http://127.0.0.1:3000/garage/${props.carData.value[props.i].id}`, {
+      method: 'DELETE',
+    })
+      .then(() => props.fetchCars())
+      .catch((err) => console.log('error: function updateCar'))
+  }
+
   return (
     <div className="garage-item" id={String(props.carData.value[props.i].id)}>
       <div className="garage-item-top">
         <button className=" btn-small" onClick={selectCar}>select</button>
-        <button className=" btn-small">remove</button>
+        <button className=" btn-small" onClick={deleteCar}>remove</button>
         <span className="">{props.carData.value[props.i].name}</span>
       </div>
       <div className="garage-item-field">

@@ -1,4 +1,4 @@
-export const brandsCars: Array<string> = [
+const brandsCars: Array<string> = [
   'Audi',
   'Alfa Romeo',
   'Alpina',
@@ -50,3 +50,5 @@ export const brandsCars: Array<string> = [
   'Mazzanti',
   'Daewoo',
 ]
+
+export default brandsCars

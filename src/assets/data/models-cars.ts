@@ -1,4 +1,4 @@
-export const modelsCars: Array<string> = [
+const modelsCars: Array<string> = [
   'Roadster',
   'S',
   'X',
@@ -50,3 +50,5 @@ export const modelsCars: Array<string> = [
   'Cayenne',
   'FX37',
 ]
+
+export default modelsCars

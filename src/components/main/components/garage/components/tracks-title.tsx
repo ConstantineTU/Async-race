@@ -3,12 +3,10 @@ import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import { carDataType, stringReactType, numberReactType } from '../../../../../type'
 
 type Props = {
-  carCount: {
-    value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
-  }
+
   pageCount: numberReactType
   page: numberReactType
+  carCount: stringReactType
 };
 
 
@@ -24,7 +22,7 @@ export default function TracksTitle(props: Props) {
     }
   }
   return (
-    <div>
+    <div className="garage-title-container">
       <div className="garage-title-wrap">
         <h2 className="garage-title">Garage - (<span className="garage-title-count">{props.carCount.value}</span> cars)</h2>
       </div>
@@ -33,7 +31,7 @@ export default function TracksTitle(props: Props) {
         <button className="btn-small btn-prev" onClick={prevPage}
           disabled={(props.page.value > 1) ? false : true}>Prev</button>
         <button className="btn-small btn-next" onClick={nextPage}
-          disabled={(props.pageCount.value > props.page.value) ? false : true}>Next</button>
+          disabled={(props.pageCount.value > props.page.value) && props.pageCount.value !== 1 ? false : true}>Next</button>
       </div>
     </div>
   );

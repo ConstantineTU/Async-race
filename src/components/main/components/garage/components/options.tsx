@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect, MouseEventHandler } from 'react';
 import { carDataType, stringReactType, numberReactType, carSelectType } from '../../../../../type'
+import carBrandsData from '../../../../../assets/data/brands-cars'
+import carModelsData from '../../../../../assets/data/models-cars'
 
 type Props = {
   fetchCars: () => void;
@@ -8,11 +10,35 @@ type Props = {
     value: carSelectType;
     setValue: React.Dispatch<React.SetStateAction<carSelectType>>;
   }
+  inputCreateRef: React.MutableRefObject<HTMLInputElement | null>
 };
 
 
 export default function Options(props: Props) {
-
+  const generateName = () => {
+    const brand = carBrandsData[Math.round(carBrandsData.length / 100 * Math.round(Math.random() * 100))];
+    const model = carModelsData[Math.round(carModelsData.length / 100 * Math.round(Math.random() * 100))];
+    return `${brand} ${model}`
+  }
+  const generateColor = () => {
+    return '#' + (Math.random().toString(16) + '000000').substring(2, 8).toUpperCase()
+  }
+  const generateCar = () => {
+    for (let i = 0; i < 100; i += 1) {
+      fetch(`http://127.0.0.1:3000/garage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: generateName(),
+          color: generateColor(),
+        })
+      })
+        .then(props.fetchCars)
+        .catch((err) => console.log('error: function createCar'))
+    }
+  }
   const createCar = () => {
     const garageInputCreate = document.getElementById('garage-input-create') as HTMLInputElement;
     const garageColorCreate = document.getElementById('garage-color-create') as HTMLInputElement;
@@ -48,8 +74,6 @@ export default function Options(props: Props) {
         })
       })
         .then(() => {
-          const garageInputUpdate = document.getElementById('garage-input-update') as HTMLInputElement;
-          garageInputUpdate.blur()
           props.carSelectUpdate.setValue({
             name: '',
             color: '#000000',
@@ -77,13 +101,15 @@ export default function Options(props: Props) {
             disabled={false} onClick={createCar}>create</button>
       </div>
       <div className="garage-inputs garage-update-inputs garage-options-block">
-        <input id='garage-input-update' className=" garage-input update" type="text"></input><input
-          id='garage-color-update' className=" garage-color-input" type="color" ></input><button className="btn garage-button"
-            disabled={props.carSelectUpdate.value.id ? false : true} onClick={updateCar}>update</button>
+        <input ref={props.inputCreateRef} id='garage-input-update' className=" garage-input update" type="text"
+          disabled={props.carSelectUpdate.value.id ? false : true}></input><input
+            id='garage-color-update' className=" garage-color-input" type="color"
+            disabled={props.carSelectUpdate.value.id ? false : true} ></input><button className="btn garage-button"
+              disabled={props.carSelectUpdate.value.id ? false : true} onClick={updateCar}>update</button>
       </div>
       <div className="garage-buttons garage-options-block"><button className="btn garage-race-button">race</button><button
         className="btn garage-reset-button" disabled={false}>reset</button><button
-          className="btn garage-generate-button">generate cars</button>
+          className="btn garage-generate-button" onClick={generateCar}>generate cars</button>
       </div>
     </div>
   );

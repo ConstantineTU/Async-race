@@ -26,7 +26,7 @@ const App: FC = () => {
   const getHeader = (res: Response) => {
     const carCountJson = res.headers.get('X-Total-Count');
     carCountJson !== null && setCarCount(carCountJson)
-    if (carCount !== null && carCount !== undefined && Number(carCount) < 8) {
+    if (carCount !== null && carCount !== undefined && Number(carCount) < 7) {
       setPage(1)
     }
     return res
@@ -45,10 +45,11 @@ const App: FC = () => {
     fetchCars()
   }, [activePage])
   useEffect(() => {
-    console.log(carData);
-    console.log(carCount);
-    (Number(carCount) > 8) && setPageCount(Math.ceil((Number(carCount) / 7)));
+    setPageCount(Math.ceil((Number(carCount) / 7)));
   }, [carData])
+  useEffect(() => {
+    if (Number(carCount) < 8) setPage(1)
+  }, [carCount])
   useEffect(() => {
     console.log('PageCount', pageCount);
   }, [pageCount])
