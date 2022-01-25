@@ -21,12 +21,13 @@ type Props = {
   }
   btnRaceRef: React.MutableRefObject<HTMLButtonElement | null>
   btnResetRef: React.MutableRefObject<HTMLButtonElement | null>
+  page: numberReactType
 };
 
 
 export default function Tracks(props: Props) {
-  const [engineIsActive, setEngineIsActive] = useState<boolean>(false)
-  const [resetIsActive, setResetIsActive] = useState<boolean>(false)
+  const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false)
+  const [resetIsActiveGlobal, setResetIsActiveGlobal] = useState<boolean>(false)
   const selectCar = (i: number) => {
     props.inputCreateRef.current && props.inputCreateRef.current.focus()
     props.carSelectUpdate.setValue({
@@ -57,7 +58,7 @@ export default function Tracks(props: Props) {
   }
   const getWinner = (res: number, i: number) => {
     if (res === 500) stopEngine(i);
-    else if (res === 200) console.log(props.carData.value[i].id, 'Доехал!');
+    else if (res === 200) console.log(props.carData.value[i].name, 'Доехал!');
   }
   const driveCar = (i: number) => {
     fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=drive`, {
@@ -66,7 +67,7 @@ export default function Tracks(props: Props) {
       .then((result) => getWinner(result.status, i))
       .catch((err) => console.log('error: function driveCar', err))
   }
-  const startEngine = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+  const startEngine = (i: number) => {
     fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=started`, {
       method: 'PATCH',
     })
@@ -75,7 +76,7 @@ export default function Tracks(props: Props) {
       .then(() => driveCar(i))
       .catch((err) => console.log('error: function startEngine', err));
   }
-  const stopCar = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+  const stopCar = (i: number) => {
     fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=stopped`, {
       method: 'PATCH',
     })
@@ -87,6 +88,31 @@ export default function Tracks(props: Props) {
     carDrive.classList.remove('active')
     carDrive.style.left = `0`
   }
+  const startRace = () => {
+    setEngineIsActiveGlobal(true)
+    Promise.all(props.carData.value.map((el, i) => fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=started`, {
+      method: 'PATCH',
+    }))).then(res => res.map((el, i) => el.json()
+      .then((result) => addDataCar(result, i))
+      .then(() => driveCar(i))
+      .catch((err) => console.log('error: function startRace', err))
+    ))
+  }
+  const stopRace = () => {
+    Promise.all(props.carData.value.map((el, i) => fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=stopped`, {
+      method: 'PATCH',
+    }))).then(res => res.map((el, i) => el.json()
+      .then(() => getStartPosition(i))
+      .then(() => setEngineIsActiveGlobal(false))
+      .catch((err) => console.log('error: function stopRace', err))
+    ))
+  }
+  useEffect(() => {
+    if (props.btnRaceRef.current) props.btnRaceRef.current.onclick = () => startRace()
+  }, [props.page])
+  useEffect(() => {
+    if (props.btnResetRef.current) props.btnResetRef.current.onclick = () => stopRace()
+  }, [props.page])
   return (
     <div>
       {props.carData.value.map((el, i) =>
@@ -97,7 +123,8 @@ export default function Tracks(props: Props) {
             <span className="">{props.carData.value[i].name}</span>
           </div>
           <div className="garage-item-field">
-            <ButtonsAB startEngine={startEngine} stopCar={stopCar} i={i} />
+            <ButtonsAB startEngine={startEngine} stopCar={stopCar} i={i}
+              engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }} />
             <div className="garage-car-wrap" id={String(props.carData.value[i].id)}>
               <svg className="garage-car" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 167.83 55.332" version="1.0">
                 <g transform="translate(-227.51 -167.55)">

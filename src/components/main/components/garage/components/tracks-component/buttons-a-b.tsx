@@ -4,26 +4,32 @@ import redFlag from '../../../../../assets/img/red-flag.svg'
 
 type Props = {
   i: number
-  startEngine: (e: React.MouseEvent<HTMLButtonElement>, i: number) => void
-  stopCar: (e: React.MouseEvent<HTMLButtonElement>, i: number) => void
+  startEngine: (i: number) => void
+  stopCar: (i: number) => void
+  engineIsActiveGlobal: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
 export default function ButtonsAB(props: Props) {
   const [engineIsActive, setEngineIsActive] = useState<boolean>(false)
-  const handleStart = (e: React.MouseEvent<HTMLButtonElement>) => {
-    props.startEngine(e, props.i)
+  const handleStart = () => {
+    props.startEngine(props.i)
     setEngineIsActive(true)
   }
-  const handleStop = (e: React.MouseEvent<HTMLButtonElement>) => {
-    props.stopCar(e, props.i)
+  const handleStop = () => {
+    props.stopCar(props.i)
     setEngineIsActive(false)
 
   }
   return (
     <div className="garage-item-control-block">
-      <button className="btn-small" onClick={(e) => handleStart(e)} disabled={engineIsActive ? true : false}>A</button>
-      <button className="btn-small" onClick={(e) => handleStop(e)} disabled={engineIsActive ? false : true}>B</button>
+      <button className="btn-small" onClick={handleStart}
+        disabled={props.engineIsActiveGlobal.value || (engineIsActive ? true : false)}>A</button>
+      <button className="btn-small" onClick={handleStop}
+        disabled={props.engineIsActiveGlobal.value || (engineIsActive ? false : true)}>B</button>
     </div>
   );
 }

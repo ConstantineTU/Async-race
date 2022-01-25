@@ -47,6 +47,7 @@ export default function Garage(props: Props) {
         isDriveActive={{ value: isDriveActive, setValue: setIsDriveActive }}
         btnRaceRef={btnRaceRef}
         btnResetRef={btnResetRef}
+        page={props.page}
       />
     </div>
   );
