@@ -15,6 +15,7 @@ type Props = {
   carCount: stringReactType
   pageCount: numberReactType
   page: numberReactType
+
 };
 
 
@@ -22,6 +23,7 @@ export default function Garage(props: Props) {
   const inputCreateRef = useRef<HTMLInputElement | null>(null)
   const btnRaceRef = useRef<HTMLButtonElement | null>(null)
   const btnResetRef = useRef<HTMLButtonElement | null>(null)
+  const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false)
   const [isDriveActive, setIsDriveActive] = useState<boolean>(false)
   const [carSelectUpdate, setCarSelectUpdate] = useState<carSelectType>({
     name: '',
@@ -31,12 +33,15 @@ export default function Garage(props: Props) {
   return (
     <div className="garage" id="garage">
       <div className='garage-container'>
-        <TracksTitle carCount={props.carCount} pageCount={props.pageCount} page={props.page} />
+        <TracksTitle carCount={props.carCount} pageCount={props.pageCount} page={props.page}
+          engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+        />
         <Options fetchCars={props.fetchCars}
           carSelectUpdate={{ value: carSelectUpdate, setValue: setCarSelectUpdate }}
           inputCreateRef={inputCreateRef}
           btnRaceRef={btnRaceRef}
           btnResetRef={btnResetRef}
+          engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
         />
       </div>
       <Tracks
@@ -48,6 +53,7 @@ export default function Garage(props: Props) {
         btnRaceRef={btnRaceRef}
         btnResetRef={btnResetRef}
         page={props.page}
+        engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
       />
     </div>
   );

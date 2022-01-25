@@ -7,6 +7,10 @@ type Props = {
   pageCount: numberReactType
   page: numberReactType
   carCount: stringReactType
+  engineIsActiveGlobal: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -29,9 +33,9 @@ export default function TracksTitle(props: Props) {
       <div className="garage-pagination">
         <h3 className="garage-pagination__title">Page #<span>{props.page.value}</span></h3>
         <button className="btn-small btn-prev" onClick={prevPage}
-          disabled={(props.page.value > 1) ? false : true}>Prev</button>
+          disabled={!props.engineIsActiveGlobal.value && (props.page.value > 1) ? false : true}>Prev</button>
         <button className="btn-small btn-next" onClick={nextPage}
-          disabled={(props.pageCount.value > props.page.value) && props.pageCount.value !== 1 ? false : true}>Next</button>
+          disabled={props.engineIsActiveGlobal.value || (props.pageCount.value < props.page.value) && props.pageCount.value !== 1 ? true : false}>Next</button>
       </div>
     </div>
   );
