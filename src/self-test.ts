@@ -1,5 +1,7 @@
 const selfTest = () => {
-  console.group('%cCross-check: Christmas-task Part 2, ConstantineTU', 'color: red');
+  // window.alert(`Добрый день, в связи с очень большой нагрузкой после праздников я не успел сделать задание до конца, и прошу Вас
+  // проверить меня в четверг вечером, к этому моменту я постараюсь выполнить все пункты.`);
+  console.group('%cCross-check: Async-race, ConstantineTU', 'color: red');
   //   console.log('%cНе выполненные пункты: Все пункты выполнены', 'color: red');
   //   console.log(
   //     `Score 200 / 200

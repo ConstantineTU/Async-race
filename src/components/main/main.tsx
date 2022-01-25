@@ -17,6 +17,7 @@ type Props = {
   carCount: stringReactType
   pageCount: numberReactType
   page: numberReactType
+
 };
 
 
@@ -25,18 +26,19 @@ export default function Main(props: Props) {
 
 
 
-  const pages = ['home', 'garage', 'winners'];
+  const pages = ['garage', 'winners'];
   return (
     <main className="main" id="main">
-      {props.activePage.value === pages[0] && <Home activePage={props.activePage} />}
-      {props.activePage.value === pages[1] && (<Garage
+      {/* {props.activePage.value === pages[0] && <Home activePage={props.activePage} />} */}
+      {props.activePage.value === pages[0] && (<Garage
         carData={props.carData}
         fetchCars={props.fetchCars}
         carCount={props.carCount}
         pageCount={props.pageCount}
         page={props.page}
+
       />)}
-      {props.activePage.value === pages[2] && (<Winners />)}
+      {props.activePage.value === pages[1] && (<Winners />)}
     </main>
   );
 }

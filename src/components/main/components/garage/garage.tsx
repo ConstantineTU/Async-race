@@ -20,6 +20,9 @@ type Props = {
 
 export default function Garage(props: Props) {
   const inputCreateRef = useRef<HTMLInputElement | null>(null)
+  const btnRaceRef = useRef<HTMLButtonElement | null>(null)
+  const btnResetRef = useRef<HTMLButtonElement | null>(null)
+  const [isDriveActive, setIsDriveActive] = useState<boolean>(false)
   const [carSelectUpdate, setCarSelectUpdate] = useState<carSelectType>({
     name: '',
     color: '#000000',
@@ -32,14 +35,19 @@ export default function Garage(props: Props) {
         <Options fetchCars={props.fetchCars}
           carSelectUpdate={{ value: carSelectUpdate, setValue: setCarSelectUpdate }}
           inputCreateRef={inputCreateRef}
+          btnRaceRef={btnRaceRef}
+          btnResetRef={btnResetRef}
         />
       </div>
-      {[...Array(props.carData.value.length)].map((el, i) => <Tracks i={i} key={i}
+      <Tracks
         carData={props.carData}
         carSelectUpdate={{ value: carSelectUpdate, setValue: setCarSelectUpdate }}
         inputCreateRef={inputCreateRef}
         fetchCars={props.fetchCars}
-      />)}
+        isDriveActive={{ value: isDriveActive, setValue: setIsDriveActive }}
+        btnRaceRef={btnRaceRef}
+        btnResetRef={btnResetRef}
+      />
     </div>
   );
 }

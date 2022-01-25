@@ -65,6 +65,10 @@
 			left: 0;
 			width: 100px;
 			height: 30px;
+
+			&.active {
+				animation: driver 10s linear paused;
+			}
 		}
 	}
 	&-flag {
@@ -88,7 +92,10 @@
 			align-items: center;
 			gap: 10px;
 
-			padding: 0px 0px 20px 0px;
+			margin: 0px 0px 10px 0px;
+			padding: 0px 0px 10px 0px;
+			border-bottom: 2px solid #fff;
+			border-bottom-style: dashed;
 		}
 	}
 	&-title {
@@ -124,5 +131,14 @@
 		padding: 5px;
 		font-size: 12px;
 		text-transform: uppercase;
+	}
+}
+
+@keyframes driver {
+	0% {
+		left: 0;
+	}
+	100% {
+		left: calc(100% - 130px);
 	}
 }

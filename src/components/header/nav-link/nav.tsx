@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function Nav(props: Props) {
-  const pages = ['home', 'garage', 'winners'];
+  const pages = ['garage', 'winners'];
 
   return (
     <ul className="nav">

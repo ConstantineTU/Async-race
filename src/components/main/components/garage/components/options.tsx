@@ -11,6 +11,8 @@ type Props = {
     setValue: React.Dispatch<React.SetStateAction<carSelectType>>;
   }
   inputCreateRef: React.MutableRefObject<HTMLInputElement | null>
+  btnRaceRef: React.MutableRefObject<HTMLButtonElement | null>
+  btnResetRef: React.MutableRefObject<HTMLButtonElement | null>
 };
 
 
@@ -107,9 +109,10 @@ export default function Options(props: Props) {
             disabled={props.carSelectUpdate.value.id ? false : true} ></input><button className="btn garage-button"
               disabled={props.carSelectUpdate.value.id ? false : true} onClick={updateCar}>update</button>
       </div>
-      <div className="garage-buttons garage-options-block"><button className="btn garage-race-button">race</button><button
-        className="btn garage-reset-button" disabled={false}>reset</button><button
-          className="btn garage-generate-button" onClick={generateCar}>generate cars</button>
+      <div className="garage-buttons garage-options-block">
+        <button ref={props.btnRaceRef} className="btn garage-race-button">race</button>
+        <button ref={props.btnResetRef} className="btn garage-reset-button" disabled={false}>reset</button>
+        <button className="btn garage-generate-button" onClick={generateCar}>generate cars</button>
       </div>
     </div>
   );

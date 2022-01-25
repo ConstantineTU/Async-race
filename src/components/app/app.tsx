@@ -8,7 +8,7 @@ const App: FC = () => {
   const [activePage, setActivePage] = useState<string>(() => {
     const saved = localStorage.getItem('activePage');
     const initialValue = saved || undefined;
-    return initialValue || 'home';
+    return initialValue || 'garage';
   });
   useEffect(() => {
     localStorage.setItem('activePage', activePage);
@@ -55,7 +55,9 @@ const App: FC = () => {
   }, [pageCount])
   useEffect(() => {
     fetchCars();
+    console.log(carData);
   }, [page])
+
 
   return (
     <Fragment>
