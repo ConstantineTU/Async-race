@@ -1,19 +1,46 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
+import './winners.scss';
+import { carDataType, stringReactType, numberReactType, carDataWinType, winnerType } from '../../../../type'
+import TableLine from './components/table-line'
 
 type Props = {
+  fetchWinners: () => void
+  carCountWinners: stringReactType
+  pageWinners: stringReactType
+  pageCountWinners: numberReactType
+  carDataWinners: {
+    value: winnerType;
+    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+  }
+  carData: {
+    value: carDataType;
+    setValue: React.Dispatch<React.SetStateAction<carDataType>>;
+  }
+
 };
 
 
-export default function Winners() {
+export default function Winners(props: Props) {
+
   return (
     <div className="winners" id="winners">
       <div className="winners-table-wrap">
-        <h2 className="winners-title">Winners(3)</h2>
-        <h3 className="winners-page">Page #1</h3>
+        <h2 className="winners-title">Winners ( <span id='winners-count' className='winners-count'>{props.carCountWinners.value}</span> )</h2>
+        <div className='winners-top'>
+          <div className='winners-title-wrap'>
+
+            <h3 className="winners-subtitle">Page #<span id='winners-page' className='winners-page'>{props.pageWinners.value}</span></h3>
+          </div>
+          <div className="winners-button-wrap">
+            <div><button disabled={false} className="btn-small btn-prev">Prev page</button></div>
+            <div><button disabled={false} className="btn-small btn-next">Next page</button></div>
+          </div>
+        </div>
         <table className="winners-table">
           <thead>
-            <tr>
+
+            <tr >
               <th>№</th>
               <th>ID</th>
               <th>CAR</th>
@@ -23,20 +50,23 @@ export default function Winners() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>193</td>
-              <td></td>
-              <td></td>
-              <td>5</td>
-              <td>2.51s</td>
-            </tr>
+            {props.carDataWinners.value.map((el, i) =>
+              <TableLine
+                key={i}
+                el={el}
+                i={i}
+                fetchWinners={props.fetchWinners}
+                carCountWinners={props.carCountWinners}
+                pageWinners={props.pageWinners}
+                pageCountWinners={props.pageCountWinners}
+                carData={props.carData}
+              />
+
+            )}
+
           </tbody>
         </table>
-        <div className="button-wrap">
-          <div><button disabled={false} className="btn-small btn-prev">Prev page</button></div>
-          <div><button disabled={false} className="btn-small btn-next">Next page</button></div>
-        </div>
+
       </div>
     </div>
   );

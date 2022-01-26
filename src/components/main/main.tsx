@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import './main.scss';
-import { carDataType, stringReactType, numberReactType } from '../../type'
+import { carDataType, stringReactType, numberReactType, carDataWinType, winnerType } from '../../type'
 
 import Home from './components/home/home';
 import Garage from './components/garage/garage';
@@ -17,7 +17,14 @@ type Props = {
   carCount: stringReactType
   pageCount: numberReactType
   page: numberReactType
-
+  carDataWinners: {
+    value: winnerType;
+    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+  }
+  fetchWinners: () => void
+  carCountWinners: stringReactType
+  pageWinners: stringReactType
+  pageCountWinners: numberReactType
 };
 
 
@@ -31,10 +38,10 @@ export default function Main(props: Props) {
     position: -1,
   })
   useEffect(() => {
-    console.log(winner);
+    // console.log(winner);
   }, [winner])
   useEffect(() => {
-    console.log(isWinner);
+    // console.log(isWinner);
   }, [isWinner])
 
 
@@ -52,7 +59,14 @@ export default function Main(props: Props) {
         isWinner={{ value: isWinner, setValue: setIsWinner }}
 
       />)}
-      {props.activePage.value === pages[1] && (<Winners />)}
+      {props.activePage.value === pages[1] && (<Winners
+        fetchWinners={props.fetchWinners}
+        carCountWinners={props.carCountWinners}
+        pageWinners={props.pageWinners}
+        pageCountWinners={props.pageCountWinners}
+        carDataWinners={props.carDataWinners}
+        carData={props.carData}
+      />)}
     </main>
   );
 }
