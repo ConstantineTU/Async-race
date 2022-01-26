@@ -2,9 +2,10 @@ import React, { Fragment, useState, useEffect, FC } from 'react';
 import Header from '../header/header';
 import Main from '../main/main';
 import Footer from '../footer/footer';
-import { carDataType, carDataWinType, winnerType } from '../../type'
+import { carDataType, carDataWinType, winnersType } from '../../type'
 
 const App: FC = () => {
+  const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false)
   const [activePage, setActivePage] = useState<string>(() => {
     const saved = localStorage.getItem('activePage');
     const initialValue = saved || undefined;
@@ -59,7 +60,7 @@ const App: FC = () => {
   const [pageWinners, setPageWinners] = useState<string>('1')
   const [carCountWinners, setCarCountWinners] = useState<string>('0')
   const [pageCountWinners, setPageCountWinners] = useState<number>(1)
-  const [carDataWinners, setCarDataWinners] = useState<winnerType>([{
+  const [carDataWinners, setCarDataWinners] = useState<winnersType>([{
     name: '',
     color: '',
     id: 0,
@@ -80,7 +81,7 @@ const App: FC = () => {
     })
       .then((res) => (getHeaderWinners(res)))
       .then((res) => res.json())
-      .then((res) => res.map((el: { id: number, wins: number, time: number }, i: number) => {
+      .then((res) => res.map((el: { id: number, wins: number, time: number }) => {
         return fetch(`http://127.0.0.1:3000/garage/${el.id}`, {
           method: 'GET',
         }).then((res) => res.json())
@@ -90,9 +91,9 @@ const App: FC = () => {
             return res
           })
       })
-      ).then((res: winnerType) => Promise.all(res))
+      ).then((res: winnersType) => Promise.all(res))
       .then((result) => setCarDataWinners(result))
-      .catch((err) => console.log('error: function fetchWinners'))
+      .catch((err) => console.log('error: function fetchWinners', err))
   }
   useEffect(() => {
     setPageCountWinners(Math.ceil((Number(carCountWinners) / 7)));
@@ -117,6 +118,7 @@ const App: FC = () => {
         carCountWinners={{ value: carCountWinners, setValue: setCarCountWinners }}
         pageWinners={{ value: pageWinners, setValue: setPageWinners }}
         pageCountWinners={{ value: pageCountWinners, setValue: setPageCountWinners }}
+        engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
       />
       <Footer />
     </Fragment>

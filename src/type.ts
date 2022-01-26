@@ -13,7 +13,16 @@ export type carSelectType = {
   color: string,
   id: number,
 };
-export type winnerType = [{
+export type winnerType = {
+
+  name: string;
+  color: string;
+  id: number;
+  time: number;
+  position: number;
+
+}
+export type winnersType = [{
 
   name: string;
   color: string;

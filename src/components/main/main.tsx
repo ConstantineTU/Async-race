@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import './main.scss';
-import { carDataType, stringReactType, numberReactType, carDataWinType, winnerType } from '../../type'
+import { carDataType, stringReactType, numberReactType, carDataWinType, winnersType } from '../../type'
 
 import Home from './components/home/home';
 import Garage from './components/garage/garage';
@@ -18,13 +18,17 @@ type Props = {
   pageCount: numberReactType
   page: numberReactType
   carDataWinners: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: winnersType;
+    setValue: React.Dispatch<React.SetStateAction<winnersType>>;
   }
   fetchWinners: () => void
   carCountWinners: stringReactType
   pageWinners: stringReactType
   pageCountWinners: numberReactType
+  engineIsActiveGlobal: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -34,17 +38,64 @@ export default function Main(props: Props) {
     name: '',
     color: '',
     id: 0,
-    time: '',
+    time: 0,
     position: -1,
   })
   useEffect(() => {
-    // console.log(winner);
+    console.log(winner);
+    if (winner.time) addWinner()
   }, [winner])
   useEffect(() => {
-    // console.log(isWinner);
+    if (isWinner) {
+      setTimeout(() => {
+        setIsWinner(false)
+      }, 5000);
+    }
   }, [isWinner])
 
+  const getWins = (res: number) => {
+    if (res === 500) {
+      return fetch(`http://127.0.0.1:3000/winners/${winner.id}`, {
+        method: 'GET',
+      })
+        .then((res) => res.json())
+        .then((res) => updateWinner(res))
+        .catch((err) => console.log('error: function getWins', err))
+    } else if (res === 201) console.log(res)
+    else if (res === 200) console.log(res)
+    else if (res === 404) console.log(res);
 
+  }
+
+  const updateWinner = (winsUpdate: { wins: number, time: number }) => {
+    fetch(`http://127.0.0.1:3000/winners/${winner.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        wins: winsUpdate.wins + 1,
+        time: winner.time < winsUpdate.time ? winner.time : winsUpdate.time
+      })
+    })
+      .then((result) => getWins(result.status))
+      .catch((err) => console.log('error: function setWinner', err))
+  }
+  const addWinner = () => {
+    fetch(`http://127.0.0.1:3000/winners/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: winner.id,
+        wins: 1,
+        time: winner.time
+      })
+    })
+      .then((result) => getWins(result.status))
+      .catch((err) => console.log('error: function setWinner', err))
+  }
   const pages = ['garage', 'winners'];
   return (
     <main className="main" id="main">
@@ -57,7 +108,7 @@ export default function Main(props: Props) {
         page={props.page}
         winner={{ value: winner, setValue: setWinner }}
         isWinner={{ value: isWinner, setValue: setIsWinner }}
-
+        engineIsActiveGlobal={props.engineIsActiveGlobal}
       />)}
       {props.activePage.value === pages[1] && (<Winners
         fetchWinners={props.fetchWinners}

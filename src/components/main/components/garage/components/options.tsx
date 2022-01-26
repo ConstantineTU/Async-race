@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect, MouseEventHandler } from 'react';
-import { carDataType, stringReactType, numberReactType, carSelectType } from '../../../../../type'
+import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../../type'
 import carBrandsData from '../../../../../assets/data/brands-cars'
 import carModelsData from '../../../../../assets/data/models-cars'
 
@@ -18,20 +18,8 @@ type Props = {
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
   winner: {
-    value: {
-      name: string;
-      color: string;
-      id: number;
-      time: string;
-      position: number;
-    };
-    setValue: React.Dispatch<React.SetStateAction<{
-      name: string;
-      color: string;
-      id: number;
-      time: string;
-      position: number;
-    }>>;
+    value: winnerType;
+    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
   }
 };
 

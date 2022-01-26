@@ -23,30 +23,7 @@ type Props = {
 
 
 export default function Winners(props: Props) {
-  // const [carWin, setCarWin] = useState<{ name: string, color: string, id: number }>({
-  //   name: 'ХУЙы',
-  //   color: '',
-  //   id: 0,
-  // });
-  // const fetchCarWinners = () => {
-  //   fetch(`http://127.0.0.1:3000/garage?id=${props.i}`, {
-  //     method: 'GET',
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => setCarWin(res))
-  //     .then(() => true)
-  //     .catch((err) => console.log('error: function fetchCars', err))
-  // }
-  // let i = 0
-  // // new Promise((resolve): unknown => fetchCarWinners())
-  // if (i === 0) {
-  //   i += 1
-  //   fetchCarWinners()
-
-  // }
-
   return (
-
     <tr >
       <td>{props.i + 1}</td>
       <td>{props.el.id}</td>
@@ -61,7 +38,7 @@ export default function Winners(props: Props) {
       </td>
       <td>{props.el.name}</td>
       <td>{props.el.wins}</td>
-      <td>{props.el.time}</td>
+      <td>{props.el.time} s</td>
     </tr>
   );
 }

@@ -67,9 +67,26 @@
 			width: 100px;
 			height: 30px;
 			transform: translateY(9px);
+			transition: transform 0.05s cubic-bezier(0.29, 1.01, 1, -0.68);
+			&::after {
+				content: "";
+				position: absolute;
+				width: 20px;
+				height: 20px;
+				top: 0;
+				right: 10px;
+				background: url("../../../../assets/img/bum.gif");
+				background-size: 20px;
+				display: none;
+			}
 			&.active {
 				animation: driver 10s linear paused;
 				animation-timing-function: ease-in;
+			}
+			&.bum {
+				&::after {
+					display: block;
+				}
 			}
 		}
 	}

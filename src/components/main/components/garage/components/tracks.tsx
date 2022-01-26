@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import redFlag from '../../../../../assets/img/red-flag.svg'
-import { carDataType, stringReactType, numberReactType, carSelectType } from '../../../../../type'
+import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../../type'
 import ButtonsAB from './tracks-component/buttons-a-b'
 
 type Props = {
@@ -27,20 +27,8 @@ type Props = {
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
   winner: {
-    value: {
-      name: string;
-      color: string;
-      id: number;
-      time: string;
-      position: number;
-    };
-    setValue: React.Dispatch<React.SetStateAction<{
-      name: string;
-      color: string;
-      id: number;
-      time: string;
-      position: number;
-    }>>;
+    value: winnerType;
+    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
   }
   isWinner: {
     value: boolean;
@@ -69,7 +57,7 @@ export default function Tracks(props: Props) {
   }
   const addDataCar = (res: { velocity: string, distance: string }, i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
-    const winnerTime = `${(Number(res.distance) / Number(res.velocity) / 1000).toFixed(2)}s`;
+    const winnerTime = (Number(res.distance) / Number(res.velocity) / 1000).toFixed(2);
     carDrive.style.animationDuration = `${(Number(res.distance) / Number(res.velocity)).toFixed(2)}ms`
     carDrive.style.animationPlayState = `running`
     carDrive.classList.add('active')
@@ -81,8 +69,14 @@ export default function Tracks(props: Props) {
   const stopEngine = (i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
     carDrive.style.animationPlayState = `paused`
+    carDrive.classList.add('bum')
+    carDrive.style.transform = `rotate(10deg) translateY(5px)`
+    setTimeout(() => {
+      carDrive.classList.remove('bum')
+      carDrive.style.transform = `rotate(0deg) translateY(11px)`
+    }, 500);
   }
-  const getWinner = (res: number, i: number, winnerTime = '') => {
+  const getWinner = (res: number, i: number, winnerTime = 0) => {
     if (res === 500) stopEngine(i);
     else if (res === 200 && props.isWinner.value === false && winnerTime && props.engineIsActiveGlobal.value) {
       console.log(props.isWinner.value);
@@ -97,7 +91,7 @@ export default function Tracks(props: Props) {
       props.isWinner.setValue(true)
     };
   }
-  const driveCar = (winnerTime = '', i: number) => {
+  const driveCar = (winnerTime = 0, i: number) => {
     fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=drive`, {
       method: 'PATCH',
     })
@@ -110,7 +104,7 @@ export default function Tracks(props: Props) {
     })
       .then((res) => res.json())
       .then((result) => addDataCar(result, i))
-      .then(() => driveCar('', i))
+      .then(() => driveCar(0, i))
       .catch((err) => console.log('error: function startEngine', err));
   }
   const stopCar = (i: number) => {
@@ -123,18 +117,21 @@ export default function Tracks(props: Props) {
   const getStartPosition = (i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
     carDrive.classList.remove('active')
+    carDrive.classList.remove('bum')
     carDrive.style.left = `0`
+    carDrive.style.transform = `translateY(9px)`
   }
   const startRace = () => {
     props.engineIsActiveGlobal.setValue(true)
     props.engineIsActiveGlobal.value = true
-    Promise.all(props.carData.value.map((el, i) => fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=started`, {
+    props.carData.value.map((el, i) => fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=started`, {
       method: 'PATCH',
-    }))).then(res => res.map((el, i) => el.json()
+    })).map((el, i) => el
+      .then((res) => res.json())
       .then((result) => addDataCar(result, i))
-      .then((winnerTime) => driveCar(winnerTime, i))
+      .then((winnerTime) => driveCar(Number(winnerTime), i))
       .catch((err) => console.log('error: function startRace', err))
-    ))
+    )
   }
   const stopRace = () => {
     Promise.all(props.carData.value.map((el, i) => fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=stopped`, {

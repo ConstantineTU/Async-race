@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import './winners.scss';
-import { carDataType, stringReactType, numberReactType, carDataWinType, winnerType } from '../../../../type'
+import { carDataType, stringReactType, numberReactType, carDataWinType, winnersType } from '../../../../type'
 import TableLine from './components/table-line'
 
 type Props = {
@@ -10,8 +10,8 @@ type Props = {
   pageWinners: stringReactType
   pageCountWinners: numberReactType
   carDataWinners: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: winnersType;
+    setValue: React.Dispatch<React.SetStateAction<winnersType>>;
   }
   carData: {
     value: carDataType;
@@ -22,7 +22,18 @@ type Props = {
 
 
 export default function Winners(props: Props) {
-
+  const nextPage = () => {
+    if (props.pageCountWinners.value > Number(props.pageWinners.value)) {
+      props.pageWinners.setValue(String(Number(props.pageWinners.value) + 1))
+      props.fetchWinners()
+    }
+  }
+  const prevPage = () => {
+    if (Number(props.pageWinners.value) > 1) {
+      props.pageWinners.setValue(String(Number(props.pageWinners.value) - 1))
+      props.fetchWinners()
+    }
+  }
   return (
     <div className="winners" id="winners">
       <div className="winners-table-wrap">
@@ -33,8 +44,8 @@ export default function Winners(props: Props) {
             <h3 className="winners-subtitle">Page #<span id='winners-page' className='winners-page'>{props.pageWinners.value}</span></h3>
           </div>
           <div className="winners-button-wrap">
-            <div><button disabled={false} className="btn-small btn-prev">Prev page</button></div>
-            <div><button disabled={false} className="btn-small btn-next">Next page</button></div>
+            <div><button disabled={false} onClick={prevPage} className="btn-small btn-prev">Prev page</button></div>
+            <div><button disabled={false} onClick={nextPage} className="btn-small btn-next">Next page</button></div>
           </div>
         </div>
         <table className="winners-table">
