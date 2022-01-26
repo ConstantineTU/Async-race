@@ -3,6 +3,7 @@ import { Dispatch, useState, SetStateAction, useEffect, useRef } from 'react';
 import Options from './components/options'
 import Tracks from './components/tracks'
 import TracksTitle from './components/tracks-title'
+import ModalWinner from './components/modal-winner';
 import { carDataType, stringReactType, numberReactType, carSelectType } from '../../../../type'
 import './garage.scss';
 
@@ -15,7 +16,26 @@ type Props = {
   carCount: stringReactType
   pageCount: numberReactType
   page: numberReactType
-
+  winner: {
+    value: {
+      name: string;
+      color: string;
+      id: number;
+      time: string;
+      position: number;
+    };
+    setValue: React.Dispatch<React.SetStateAction<{
+      name: string;
+      color: string;
+      id: number;
+      time: string;
+      position: number;
+    }>>;
+  }
+  isWinner: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -35,6 +55,7 @@ export default function Garage(props: Props) {
       <div className='garage-container'>
         <TracksTitle carCount={props.carCount} pageCount={props.pageCount} page={props.page}
           engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+          winner={props.winner}
         />
         <Options fetchCars={props.fetchCars}
           carSelectUpdate={{ value: carSelectUpdate, setValue: setCarSelectUpdate }}
@@ -42,6 +63,7 @@ export default function Garage(props: Props) {
           btnRaceRef={btnRaceRef}
           btnResetRef={btnResetRef}
           engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+          winner={props.winner}
         />
       </div>
       <Tracks
@@ -54,7 +76,10 @@ export default function Garage(props: Props) {
         btnResetRef={btnResetRef}
         page={props.page}
         engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+        winner={props.winner}
+        isWinner={props.isWinner}
       />
+      {props.isWinner.value && <ModalWinner winner={props.winner} />}
     </div>
   );
 }

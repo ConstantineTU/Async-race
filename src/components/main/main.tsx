@@ -22,8 +22,20 @@ type Props = {
 
 
 export default function Main(props: Props) {
-
-
+  const [isWinner, setIsWinner] = useState<boolean>(false)
+  const [winner, setWinner] = useState({
+    name: '',
+    color: '',
+    id: 0,
+    time: '',
+    position: -1,
+  })
+  useEffect(() => {
+    console.log(winner);
+  }, [winner])
+  useEffect(() => {
+    console.log(isWinner);
+  }, [isWinner])
 
 
   const pages = ['garage', 'winners'];
@@ -36,6 +48,8 @@ export default function Main(props: Props) {
         carCount={props.carCount}
         pageCount={props.pageCount}
         page={props.page}
+        winner={{ value: winner, setValue: setWinner }}
+        isWinner={{ value: isWinner, setValue: setIsWinner }}
 
       />)}
       {props.activePage.value === pages[1] && (<Winners />)}

@@ -6,6 +6,7 @@
 	height: 100%;
 }
 .garage {
+	position: relative;
 	&-container {
 		display: flex;
 		justify-content: space-between;
@@ -65,9 +66,10 @@
 			left: 0;
 			width: 100px;
 			height: 30px;
-
+			transform: translateY(9px);
 			&.active {
 				animation: driver 10s linear paused;
+				animation-timing-function: ease-in;
 			}
 		}
 	}
@@ -119,6 +121,29 @@
 		margin: 0px 0px 30px 0px;
 		font-size: 20px;
 		&-title {
+		}
+	}
+	&-modal {
+		&-title {
+			text-align: center;
+		}
+		&-container {
+			position: absolute;
+			right: calc(50% - 100px);
+			top: 50%;
+			width: 100%;
+			max-width: 200px;
+			padding: 10px;
+			line-height: 20px;
+			display: flex;
+			flex-direction: column;
+			letter-spacing: 1px;
+			color: #73ff00;
+			border: 2px solid rgb(130, 195, 238);
+			transition: all 0.7s;
+			background-color: #203957cb;
+			text-align: left;
+			z-index: 99;
 		}
 	}
 }

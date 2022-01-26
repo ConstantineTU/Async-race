@@ -11,6 +11,22 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
+  winner: {
+    value: {
+      name: string;
+      color: string;
+      id: number;
+      time: string;
+      position: number;
+    };
+    setValue: React.Dispatch<React.SetStateAction<{
+      name: string;
+      color: string;
+      id: number;
+      time: string;
+      position: number;
+    }>>;
+  }
 };
 
 

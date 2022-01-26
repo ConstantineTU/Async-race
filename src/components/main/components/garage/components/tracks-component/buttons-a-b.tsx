@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
-import redFlag from '../../../../../assets/img/red-flag.svg'
 
 type Props = {
   i: number

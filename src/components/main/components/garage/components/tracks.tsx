@@ -26,6 +26,26 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
+  winner: {
+    value: {
+      name: string;
+      color: string;
+      id: number;
+      time: string;
+      position: number;
+    };
+    setValue: React.Dispatch<React.SetStateAction<{
+      name: string;
+      color: string;
+      id: number;
+      time: string;
+      position: number;
+    }>>;
+  }
+  isWinner: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -49,26 +69,39 @@ export default function Tracks(props: Props) {
   }
   const addDataCar = (res: { velocity: string, distance: string }, i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
-    carDrive.style.animationDuration = `${Math.round(Number(res.distance) / Number(res.velocity))}ms`
+    const winnerTime = `${(Number(res.distance) / Number(res.velocity) / 1000).toFixed(2)}s`;
+    carDrive.style.animationDuration = `${(Number(res.distance) / Number(res.velocity)).toFixed(2)}ms`
     carDrive.style.animationPlayState = `running`
     carDrive.classList.add('active')
     carDrive.addEventListener('animationend', () => {
       carDrive.style.left = `calc(100% - 130px)`
     })
+    return winnerTime;
   }
   const stopEngine = (i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
     carDrive.style.animationPlayState = `paused`
   }
-  const getWinner = (res: number, i: number) => {
+  const getWinner = (res: number, i: number, winnerTime = '') => {
     if (res === 500) stopEngine(i);
-    else if (res === 200) console.log(props.carData.value[i].name, 'Доехал!');
+    else if (res === 200 && props.isWinner.value === false && winnerTime && props.engineIsActiveGlobal.value) {
+      console.log(props.isWinner.value);
+      props.winner.setValue({
+        name: props.carData.value[i].name,
+        color: props.carData.value[i].color,
+        id: props.carData.value[i].id,
+        time: winnerTime,
+        position: i,
+      })
+      props.isWinner.value = true
+      props.isWinner.setValue(true)
+    };
   }
-  const driveCar = (i: number) => {
+  const driveCar = (winnerTime = '', i: number) => {
     fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=drive`, {
       method: 'PATCH',
     })
-      .then((result) => getWinner(result.status, i))
+      .then((result) => getWinner(result.status, i, winnerTime))
       .catch((err) => console.log('error: function driveCar', err))
   }
   const startEngine = (i: number) => {
@@ -77,7 +110,7 @@ export default function Tracks(props: Props) {
     })
       .then((res) => res.json())
       .then((result) => addDataCar(result, i))
-      .then(() => driveCar(i))
+      .then(() => driveCar('', i))
       .catch((err) => console.log('error: function startEngine', err));
   }
   const stopCar = (i: number) => {
@@ -94,11 +127,12 @@ export default function Tracks(props: Props) {
   }
   const startRace = () => {
     props.engineIsActiveGlobal.setValue(true)
+    props.engineIsActiveGlobal.value = true
     Promise.all(props.carData.value.map((el, i) => fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=started`, {
       method: 'PATCH',
     }))).then(res => res.map((el, i) => el.json()
       .then((result) => addDataCar(result, i))
-      .then(() => driveCar(i))
+      .then((winnerTime) => driveCar(winnerTime, i))
       .catch((err) => console.log('error: function startRace', err))
     ))
   }
@@ -107,7 +141,12 @@ export default function Tracks(props: Props) {
       method: 'PATCH',
     }))).then(res => res.map((el, i) => el.json()
       .then(() => getStartPosition(i))
-      .then(() => props.engineIsActiveGlobal.setValue(false))
+      .then(() => {
+        props.engineIsActiveGlobal.setValue(false)
+        props.engineIsActiveGlobal.value = false
+        props.isWinner.setValue(false)
+        props.isWinner.value = false
+      })
       .catch((err) => console.log('error: function stopRace', err))
     ))
   }
