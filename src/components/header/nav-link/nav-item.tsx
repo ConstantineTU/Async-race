@@ -21,11 +21,7 @@ type Props = {
 
 export default function NavItem(props: Props) {
   const handleChange = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (props.engineIsActiveGlobal.value) {
-      window.alert('Please click on the reset button');
-    } else {
-      props.activePage.setValue(props.pageName);
-    }
+    props.activePage.setValue(props.pageName);
   };
 
   return (

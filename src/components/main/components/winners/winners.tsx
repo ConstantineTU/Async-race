@@ -20,46 +20,44 @@ type Props = {
 };
 
 export default function Winners(props: Props) {
-  const [id, setId] = useState<boolean>(false);
-  const [wins, setWins] = useState<boolean>(false);
-  const [time, settime] = useState<boolean>(false);
+  const [id, setId] = useState<boolean | null>(null);
+  const [wins, setWins] = useState<boolean | null>(null);
+  const [time, settime] = useState<boolean | null>(null);
 
   const handleChange = (prop: string) => {
-    if (prop === 'id' && !id) {
-      setId(true);
-      setWins(false);
-      settime(false);
-    } else if (prop === 'id' && id) {
-      setId(false);
-      setWins(false);
-      settime(false);
-    }
-    if (prop === 'wins' && !wins) {
-      setWins(true);
-      settime(false);
-      setId(false);
-    } else if (prop === 'wins' && wins) {
-      setWins(false);
-      settime(false);
-      setId(false);
-    }
-    if (prop === 'time' && !time) {
-      settime(true);
-      setId(false);
-      setWins(false);
-    } else if (prop === 'time' && time) {
-      settime(false);
-      setId(false);
-      setWins(false);
+    if (prop === 'id') {
+      if (id) {
+        setId(false);
+        setWins(null);
+        settime(null);
+      } else {
+        setId(true);
+        setWins(null);
+        settime(null);
+      }
+    } else if (prop === 'wins') {
+      if (wins) {
+        setWins(false);
+        settime(null);
+        setId(null);
+      } else {
+        setWins(true);
+        settime(null);
+        setId(null);
+      }
+    } else if (prop === 'time') {
+      if (time) {
+        settime(false);
+        setId(null);
+        setWins(null);
+      } else {
+        settime(true);
+        setId(null);
+        setWins(null);
+      }
     }
 
-    if (id) {
-      props.fetchWinners(prop, 'DESC');
-    }
-    if (wins) {
-      props.fetchWinners(prop, 'DESC');
-    }
-    if (time) {
+    if (id || wins || time) {
       props.fetchWinners(prop, 'DESC');
     }
     if (!id && !wins && !time) props.fetchWinners(prop, 'ASC');
@@ -111,15 +109,15 @@ export default function Winners(props: Props) {
             <tr>
               <th>№</th>
               <th className="winners-sort-button" onClick={() => handleChange('id')}>
-                ID
+                ID {id ? '↓' : id === false ? '↑' : false}
               </th>
               <th>CAR</th>
               <th>NAME</th>
               <th className="winners-sort-button" onClick={() => handleChange('wins')}>
-                WINS
+                WINS {wins ? '↓' : wins === false ? '↑' : false}
               </th>
               <th className="winners-sort-button" onClick={() => handleChange('time')}>
-                BEST TIME
+                BEST TIME {time ? '↓' : time === false ? '↑' : false}
               </th>
             </tr>
           </thead>

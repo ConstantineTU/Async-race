@@ -110,7 +110,7 @@ export default function Options(props: Props) {
     garageInputUpdate.value = props.carSelectUpdate.value.name;
     garageColorUpdate.value = props.carSelectUpdate.value.color;
     garageInputUpdate.focus();
-  }, [props.carSelectUpdate]);
+  }, [props.carSelectUpdate.value.id]);
   const changeTextCreate = ({ target }: { target: HTMLInputElement }) => {
     props.textCreate.setValue(target.value);
   };
