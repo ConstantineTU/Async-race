@@ -13,7 +13,7 @@ type Props = {
     value: carDataType;
     setValue: React.Dispatch<React.SetStateAction<carDataType>>;
   }
-  fetchCars: () => void
+  fetchCars: (sortDefault?: string, orderDefault?: string) => void
   carCount: stringReactType
   pageCount: numberReactType
   page: numberReactType

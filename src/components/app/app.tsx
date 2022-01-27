@@ -59,6 +59,7 @@ const App: FC = () => {
   // Winners
   const [pageWinners, setPageWinners] = useState<string>('1')
   const [carCountWinners, setCarCountWinners] = useState<string>('0')
+
   const [pageCountWinners, setPageCountWinners] = useState<number>(1)
   const [carDataWinners, setCarDataWinners] = useState<winnersType>([{
     name: '',
@@ -75,8 +76,12 @@ const App: FC = () => {
     }
     return res
   }
-  const fetchWinners = () => {
-    fetch(`http://127.0.0.1:3000/winners?_page=${pageWinners}&_limit=7&_sort=time`, {
+  const [sort, setSort] = useState<string>('time')
+  const [order, setOrder] = useState<string>('ASC')
+  const fetchWinners = (sortDefault: string = sort, orderDefault: string = order) => {
+    setSort(sortDefault)
+    setOrder(orderDefault)
+    fetch(`http://127.0.0.1:3000/winners?_page=${pageWinners}&_limit=10&_sort=${sortDefault}&_order=${orderDefault}`, {
       method: 'GET',
     })
       .then((res) => (getHeaderWinners(res)))
@@ -96,11 +101,14 @@ const App: FC = () => {
       .catch((err) => console.log('error: function fetchWinners', err))
   }
   useEffect(() => {
-    setPageCountWinners(Math.ceil((Number(carCountWinners) / 7)));
+    setPageCountWinners(Math.ceil((Number(carCountWinners) / 10)));
   }, [carDataWinners])
   useEffect(() => {
-    if (Number(carCountWinners) < 8) setPageWinners('1')
+    if (Number(carCountWinners) < 11) setPageWinners('1')
   }, [carCountWinners])
+  useEffect(() => {
+    fetchWinners()
+  }, [pageWinners])
 
   return (
     <Fragment>

@@ -5,7 +5,7 @@ import { carDataType, stringReactType, numberReactType, carDataWinType, winnersT
 import TableLine from './components/table-line'
 
 type Props = {
-  fetchWinners: () => void
+  fetchWinners: (sortDefault?: string, orderDefault?: string) => void
   carCountWinners: stringReactType
   pageWinners: stringReactType
   pageCountWinners: numberReactType
@@ -22,16 +22,32 @@ type Props = {
 
 
 export default function Winners(props: Props) {
+  const [id, setId] = useState<boolean>(false)
+  const [wins, setWins] = useState<boolean>(false)
+  const [time, settime] = useState<boolean>(false)
+
+  const handleChange = (prop: string) => {
+
+    if (prop === 'id' && !id) { setId(true); setWins(false); settime(false) }
+    else if (prop === 'id' && id) { setId(false); setWins(false); settime(false) }
+    if (prop === 'wins' && !wins) { setWins(true); settime(false); setId(false) }
+    else if (prop === 'wins' && wins) { setWins(false); settime(false); setId(false) }
+    if (prop === 'time' && !time) { settime(true); setId(false); setWins(false) }
+    else if (prop === 'time' && time) { settime(false); setId(false); setWins(false) }
+
+    if (id) { props.fetchWinners(prop, 'DESC') }
+    if (wins) { props.fetchWinners(prop, 'DESC') }
+    if (time) { props.fetchWinners(prop, 'DESC') }
+    if (!id && !wins && !time) props.fetchWinners(prop, 'ASC')
+  }
   const nextPage = () => {
     if (props.pageCountWinners.value > Number(props.pageWinners.value)) {
       props.pageWinners.setValue(String(Number(props.pageWinners.value) + 1))
-      props.fetchWinners()
     }
   }
   const prevPage = () => {
     if (Number(props.pageWinners.value) > 1) {
       props.pageWinners.setValue(String(Number(props.pageWinners.value) - 1))
-      props.fetchWinners()
     }
   }
   return (
@@ -53,11 +69,11 @@ export default function Winners(props: Props) {
 
             <tr >
               <th>№</th>
-              <th>ID</th>
+              <th className="winners-sort-button" onClick={() => handleChange('id')}>ID</th>
               <th>CAR</th>
               <th>NAME</th>
-              <th className="winners-sort-button">WINS</th>
-              <th className="winners-sort-button">BEST TIME</th>
+              <th className="winners-sort-button" onClick={() => handleChange('wins')}>WINS</th>
+              <th className="winners-sort-button" onClick={() => handleChange('time')}>BEST TIME</th>
             </tr>
           </thead>
           <tbody>

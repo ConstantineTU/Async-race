@@ -3,7 +3,7 @@ import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import { carDataType, stringReactType, numberReactType, carDataWinType } from '../../../../../type'
 
 type Props = {
-  fetchWinners: () => void
+  fetchWinners: (sortDefault?: string, orderDefault?: string) => void
   carCountWinners: stringReactType
   pageWinners: stringReactType
   pageCountWinners: numberReactType
@@ -25,7 +25,7 @@ type Props = {
 export default function Winners(props: Props) {
   return (
     <tr >
-      <td>{props.i + 1}</td>
+      <td>{props.i + 1 + (Number(props.pageWinners.value) - 1) * 10}</td>
       <td>{props.el.id}</td>
       <td>
         <div className="winners-car-wrap">
