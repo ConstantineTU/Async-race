@@ -6,6 +6,7 @@ import { carDataType, carDataWinType, winnersType } from '../../type'
 
 const App: FC = () => {
   const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false)
+  const [isWinner, setIsWinner] = useState<boolean>(false)
   const [activePage, setActivePage] = useState<string>(() => {
     const saved = localStorage.getItem('activePage');
     const initialValue = saved || undefined;
@@ -13,6 +14,8 @@ const App: FC = () => {
   });
   useEffect(() => {
     localStorage.setItem('activePage', activePage);
+    setEngineIsActiveGlobal(false)
+    setIsWinner(false)
   }, [activePage]);
 
   const [page, setPage] = useState<number>(1)
@@ -112,7 +115,11 @@ const App: FC = () => {
 
   return (
     <Fragment>
-      <Header activePage={{ value: activePage, setValue: setActivePage }} />
+      <Header activePage={{ value: activePage, setValue: setActivePage }}
+        engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+        isWinner={{ value: isWinner, setValue: setIsWinner }}
+
+      />
       <Main
         activePage={{ value: activePage, setValue: setActivePage }}
         carData={{ value: carData, setValue: setCarData }}
@@ -120,6 +127,7 @@ const App: FC = () => {
         carCount={{ value: carCount, setValue: setCarCount }}
         page={{ value: page, setValue: setPage }}
         pageCount={{ value: pageCount, setValue: setPageCount }}
+        isWinner={{ value: isWinner, setValue: setIsWinner }}
 
         carDataWinners={{ value: carDataWinners, setValue: setCarDataWinners }}
         fetchWinners={fetchWinners}
@@ -127,6 +135,7 @@ const App: FC = () => {
         pageWinners={{ value: pageWinners, setValue: setPageWinners }}
         pageCountWinners={{ value: pageCountWinners, setValue: setPageCountWinners }}
         engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+
       />
       <Footer />
     </Fragment>

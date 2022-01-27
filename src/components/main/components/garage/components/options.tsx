@@ -21,6 +21,15 @@ type Props = {
     value: winnerType;
     setValue: React.Dispatch<React.SetStateAction<winnerType>>;
   }
+  blocked: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+  textCreate: stringReactType
+  colorCreate: stringReactType
+  textUpdate: stringReactType
+  colorUpdate: stringReactType
+  activePage: stringReactType
 };
 
 
@@ -103,22 +112,48 @@ export default function Options(props: Props) {
     garageColorUpdate.value = props.carSelectUpdate.value.color
     garageInputUpdate.focus()
   }, [props.carSelectUpdate])
+  const changeTextCreate = ({ target }: { target: HTMLInputElement }) => {
+    props.textCreate.setValue(target.value)
+  }
+  const changeColorCreate = ({ target }: { target: HTMLInputElement }) => {
+    props.colorCreate.setValue(target.value)
+  }
+  const changeNameUpdate = ({ target }: { target: HTMLInputElement }) => {
+    props.textUpdate.setValue(target.value)
+  }
+  const changeColorUpdate = ({ target }: { target: HTMLInputElement }) => {
+    props.colorUpdate.setValue(target.value)
+  }
+  const loadCreateUpdate = () => {
+    const garageColorCreate = document.getElementById('garage-input-create') as HTMLInputElement;
+    const garageInputCreate = document.getElementById('garage-color-create') as HTMLInputElement;
+    const garageInputUpdate = document.getElementById('garage-input-update') as HTMLInputElement;
+    const garageColorUpdate = document.getElementById('garage-color-update') as HTMLInputElement;
+    garageColorCreate.value = props.textCreate.value
+    garageInputCreate.value = props.colorCreate.value
+    garageInputUpdate.value = props.textUpdate.value
+    garageColorUpdate.value = props.colorUpdate.value
+  }
+  useEffect(() => {
+    loadCreateUpdate()
+  }, [props.activePage])
   return (
     <div className="garage-options">
       <div className="garage-inputs garage-create-inputs garage-options-block">
-        <input id='garage-input-create' className=" garage-input create" type="text"></input><input
-          id='garage-color-create' className=" garage-color-input" type="color"></input><button className="btn garage-button"
-            disabled={false} onClick={createCar}>create</button>
+        <input onChange={changeTextCreate} id='garage-input-create' className=" garage-input create" type="text"></input>
+        <input onChange={changeColorCreate} id='garage-color-create' className=" garage-color-input" type="color"></input>
+        <button className="btn garage-button" disabled={false} onClick={createCar}>create</button>
       </div>
       <div className="garage-inputs garage-update-inputs garage-options-block">
-        <input ref={props.inputCreateRef} id='garage-input-update' className=" garage-input update" type="text"
-          disabled={props.carSelectUpdate.value.id ? false : true}></input><input
-            id='garage-color-update' className=" garage-color-input" type="color"
-            disabled={props.carSelectUpdate.value.id ? false : true} ></input><button className="btn garage-button"
-              disabled={props.carSelectUpdate.value.id ? false : true} onClick={updateCar}>update</button>
+        <input onChange={changeNameUpdate} ref={props.inputCreateRef} id='garage-input-update' className=" garage-input update" type="text"
+          disabled={props.carSelectUpdate.value.id ? false : true}></input>
+        <input onChange={changeColorUpdate} id='garage-color-update' className=" garage-color-input" type="color"
+          disabled={props.carSelectUpdate.value.id ? false : true} ></input>
+        <button className="btn garage-button" disabled={props.carSelectUpdate.value.id ? false : true}
+          onClick={updateCar}>update</button>
       </div>
       <div className="garage-buttons garage-options-block">
-        <button ref={props.btnRaceRef} className="btn garage-race-button" disabled={!props.engineIsActiveGlobal.value ? false : true}>race</button>
+        <button ref={props.btnRaceRef} className="btn garage-race-button" disabled={!props.blocked.value && !props.engineIsActiveGlobal.value ? false : true}>race</button>
         <button ref={props.btnResetRef} className="btn garage-reset-button" disabled={props.engineIsActiveGlobal.value ? false : true}>reset</button>
         <button className="btn garage-generate-button" onClick={generateCar}>generate cars</button>
       </div>

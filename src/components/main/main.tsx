@@ -29,11 +29,16 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
+  isWinner: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
 export default function Main(props: Props) {
   const [isWinner, setIsWinner] = useState<boolean>(false)
+  const [blocked, setBlocked] = useState<boolean>(false)
   const [winner, setWinner] = useState({
     name: '',
     color: '',
@@ -97,6 +102,39 @@ export default function Main(props: Props) {
       .catch((err) => console.log('error: function setWinner', err))
   }
   const pages = ['garage', 'winners'];
+
+  const [textCreate, setTextCreate] = useState<string>(() => {
+    const saved = localStorage.getItem('textCreate');
+    const initialValue = saved || undefined;
+    return initialValue || '';
+  })
+  const [colorCreate, setColorCreate] = useState<string>(() => {
+    const saved = localStorage.getItem('colorCreate');
+    const initialValue = saved || undefined;
+    return initialValue || '';
+  })
+  const [textUpdate, setTextUpdate] = useState<string>(() => {
+    const saved = localStorage.getItem('textUpdate');
+    const initialValue = saved || undefined;
+    return initialValue || '';
+  })
+  const [colorUpdate, setColorUpdate] = useState<string>(() => {
+    const saved = localStorage.getItem('colorUpdate');
+    const initialValue = saved || undefined;
+    return initialValue || '';
+  })
+  useEffect(() => {
+    localStorage.setItem('textCreate', textCreate);
+  }, [textCreate]);
+  useEffect(() => {
+    localStorage.setItem('colorCreate', colorCreate);
+  }, [colorCreate]);
+  useEffect(() => {
+    localStorage.setItem('textUpdate', textUpdate);
+  }, [textUpdate]);
+  useEffect(() => {
+    localStorage.setItem('colorUpdate', colorUpdate);
+  }, [colorUpdate]);
   return (
     <main className="main" id="main">
       {/* {props.activePage.value === pages[0] && <Home activePage={props.activePage} />} */}
@@ -108,7 +146,13 @@ export default function Main(props: Props) {
         page={props.page}
         winner={{ value: winner, setValue: setWinner }}
         isWinner={{ value: isWinner, setValue: setIsWinner }}
+        blocked={{ value: blocked, setValue: setBlocked }}
         engineIsActiveGlobal={props.engineIsActiveGlobal}
+        textCreate={{ value: textCreate, setValue: setTextCreate }}
+        colorCreate={{ value: colorCreate, setValue: setColorCreate }}
+        textUpdate={{ value: textUpdate, setValue: setTextUpdate }}
+        colorUpdate={{ value: colorUpdate, setValue: setColorUpdate }}
+        activePage={props.activePage}
       />)}
       {props.activePage.value === pages[1] && (<Winners
         fetchWinners={props.fetchWinners}

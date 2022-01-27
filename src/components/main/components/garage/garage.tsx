@@ -28,6 +28,15 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
+  blocked: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+  textCreate: stringReactType
+  colorCreate: stringReactType
+  textUpdate: stringReactType
+  colorUpdate: stringReactType
+  activePage: stringReactType
 };
 
 
@@ -35,6 +44,9 @@ export default function Garage(props: Props) {
   const inputCreateRef = useRef<HTMLInputElement | null>(null)
   const btnRaceRef = useRef<HTMLButtonElement | null>(null)
   const btnResetRef = useRef<HTMLButtonElement | null>(null)
+  const btnPrevRef = useRef<HTMLButtonElement | null>(null)
+  const btnNextRef = useRef<HTMLButtonElement | null>(null)
+
 
   const [isDriveActive, setIsDriveActive] = useState<boolean>(false)
   const [carSelectUpdate, setCarSelectUpdate] = useState<carSelectType>({
@@ -48,6 +60,9 @@ export default function Garage(props: Props) {
         <TracksTitle carCount={props.carCount} pageCount={props.pageCount} page={props.page}
           engineIsActiveGlobal={props.engineIsActiveGlobal}
           winner={props.winner}
+          btnPrevRef={btnPrevRef}
+          btnNextRef={btnNextRef}
+          blocked={props.blocked}
         />
         <Options fetchCars={props.fetchCars}
           carSelectUpdate={{ value: carSelectUpdate, setValue: setCarSelectUpdate }}
@@ -56,6 +71,12 @@ export default function Garage(props: Props) {
           btnResetRef={btnResetRef}
           engineIsActiveGlobal={props.engineIsActiveGlobal}
           winner={props.winner}
+          blocked={props.blocked}
+          textCreate={props.textCreate}
+          colorCreate={props.colorCreate}
+          textUpdate={props.textUpdate}
+          colorUpdate={props.colorUpdate}
+          activePage={props.activePage}
         />
       </div>
       <Tracks
@@ -66,12 +87,15 @@ export default function Garage(props: Props) {
         isDriveActive={{ value: isDriveActive, setValue: setIsDriveActive }}
         btnRaceRef={btnRaceRef}
         btnResetRef={btnResetRef}
+        btnPrevRef={btnPrevRef}
+        btnNextRef={btnNextRef}
         page={props.page}
         engineIsActiveGlobal={props.engineIsActiveGlobal}
         winner={props.winner}
         isWinner={props.isWinner}
+        blocked={props.blocked}
       />
-      {props.isWinner.value && <ModalWinner winner={props.winner} />}
+      {props.isWinner.value && props.engineIsActiveGlobal.value && <ModalWinner winner={props.winner} />}
     </div>
   );
 }

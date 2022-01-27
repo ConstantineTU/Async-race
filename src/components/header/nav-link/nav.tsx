@@ -9,6 +9,14 @@ type Props = {
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
   }
+  engineIsActiveGlobal: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+  isWinner: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 export default function Nav(props: Props) {
@@ -22,6 +30,8 @@ export default function Nav(props: Props) {
           key={index}
           active={props.activePage.value === pageName}
           activePage={props.activePage}
+          engineIsActiveGlobal={props.engineIsActiveGlobal}
+          isWinner={props.isWinner}
         />
       ))}
     </ul>

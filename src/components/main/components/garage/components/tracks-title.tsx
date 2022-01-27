@@ -15,6 +15,12 @@ type Props = {
     value: winnerType;
     setValue: React.Dispatch<React.SetStateAction<winnerType>>;
   }
+  btnPrevRef: React.MutableRefObject<HTMLButtonElement | null>
+  btnNextRef: React.MutableRefObject<HTMLButtonElement | null>
+  blocked: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -36,10 +42,10 @@ export default function TracksTitle(props: Props) {
       </div>
       <div className="garage-pagination">
         <h3 className="garage-pagination__title">Page #<span>{props.page.value}</span></h3>
-        <button className="btn-small btn-prev" onClick={prevPage}
-          disabled={!props.engineIsActiveGlobal.value && (props.page.value > 1) ? false : true}>Prev</button>
-        <button className="btn-small btn-next" onClick={nextPage}
-          disabled={props.engineIsActiveGlobal.value || (props.pageCount.value < props.page.value) && props.pageCount.value !== 1 ? true : false}>Next</button>
+        <button className="btn-small btn-prev" onClick={prevPage} ref={props.btnPrevRef}
+          disabled={!props.blocked.value && !props.engineIsActiveGlobal.value && (props.page.value > 1) ? false : true}>Prev</button>
+        <button className="btn-small btn-next" onClick={nextPage} ref={props.btnNextRef}
+          disabled={props.blocked.value || props.engineIsActiveGlobal.value || (props.pageCount.value < props.page.value) && props.pageCount.value !== 1 ? true : false}>Next</button>
       </div>
     </div>
   );

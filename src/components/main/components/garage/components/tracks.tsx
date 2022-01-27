@@ -1,5 +1,7 @@
+import { Resolver } from 'dns';
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect } from 'react';
+import { Resolve } from 'webpack';
 import redFlag from '../../../../../assets/img/red-flag.svg'
 import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../../type'
 import ButtonsAB from './tracks-component/buttons-a-b'
@@ -34,6 +36,12 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
+  btnPrevRef: React.MutableRefObject<HTMLButtonElement | null>
+  btnNextRef: React.MutableRefObject<HTMLButtonElement | null>
+  blocked: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -52,34 +60,41 @@ export default function Tracks(props: Props) {
     fetch(`http://127.0.0.1:3000/garage/${props.carData.value[i].id}`, {
       method: 'DELETE',
     })
+      .then(() => fetch(`http://127.0.0.1:3000/winners/${props.carData.value[i].id}`, {
+        method: 'DELETE',
+      }))
       .then(() => props.fetchCars())
       .catch((err) => console.log('error: function updateCar'))
   }
   const addDataCar = (res: { velocity: string, distance: string }, i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
     const winnerTime = (Number(res.distance) / Number(res.velocity) / 1000).toFixed(2);
-    carDrive.style.animationDuration = `${(Number(res.distance) / Number(res.velocity)).toFixed(2)}ms`
-    carDrive.style.animationPlayState = `running`
-    carDrive.classList.add('active')
-    carDrive.addEventListener('animationend', () => {
-      carDrive.style.left = `calc(100% - 130px)`
-    })
+    if (carDrive) {
+      carDrive.style.animationDuration = `${(Number(res.distance) / Number(res.velocity)).toFixed(2)}ms`
+      carDrive.style.animationPlayState = `running`
+      carDrive.classList.add('active')
+      carDrive.addEventListener('animationend', () => {
+        carDrive.style.left = `calc(100% - 130px)`
+      })
+    }
     return winnerTime;
   }
   const stopEngine = (i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
-    carDrive.style.animationPlayState = `paused`
-    carDrive.classList.add('bum')
-    carDrive.style.transform = `rotate(10deg) translateY(5px)`
-    setTimeout(() => {
-      carDrive.classList.remove('bum')
-      carDrive.style.transform = `rotate(0deg) translateY(11px)`
-    }, 500);
+    if (carDrive) {
+      carDrive.style.animationPlayState = `paused`
+      carDrive.classList.add('bum')
+      carDrive.style.transform = `rotate(10deg) translateY(5px)`
+      setTimeout(() => {
+        carDrive.classList.remove('bum')
+        carDrive.style.transform = `rotate(0deg) translateY(11px)`
+      }, 500);
+    }
   }
   const getWinner = (res: number, i: number, winnerTime = 0) => {
     if (res === 500) stopEngine(i);
     else if (res === 200 && props.isWinner.value === false && winnerTime && props.engineIsActiveGlobal.value) {
-      console.log(props.isWinner.value);
+      console.log(props.engineIsActiveGlobal.value);
       props.winner.setValue({
         name: props.carData.value[i].name,
         color: props.carData.value[i].color,
@@ -99,7 +114,7 @@ export default function Tracks(props: Props) {
       .catch((err) => console.log('error: function driveCar', err))
   }
   const startEngine = (i: number) => {
-    fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=started`, {
+    return fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=started`, {
       method: 'PATCH',
     })
       .then((res) => res.json())
@@ -116,10 +131,12 @@ export default function Tracks(props: Props) {
   }
   const getStartPosition = (i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
-    carDrive.classList.remove('active')
-    carDrive.classList.remove('bum')
-    carDrive.style.left = `0`
-    carDrive.style.transform = `translateY(9px)`
+    if (carDrive) {
+      carDrive.classList.remove('active')
+      carDrive.classList.remove('bum')
+      carDrive.style.left = `0`
+      carDrive.style.transform = `translateY(9px)`
+    }
   }
   const startRace = () => {
     props.engineIsActiveGlobal.setValue(true)
@@ -152,6 +169,7 @@ export default function Tracks(props: Props) {
   }, [props.page])
   useEffect(() => {
     if (props.btnResetRef.current) props.btnResetRef.current.onclick = () => stopRace()
+
   }, [props.page])
   return (
     <div>
@@ -164,7 +182,8 @@ export default function Tracks(props: Props) {
           </div>
           <div className="garage-item-field">
             <ButtonsAB startEngine={startEngine} stopCar={stopCar} i={i}
-              engineIsActiveGlobal={props.engineIsActiveGlobal} />
+              engineIsActiveGlobal={props.engineIsActiveGlobal} blocked={props.blocked}
+            />
             <div className="garage-car-wrap" id={String(el.id)}>
               <svg className="garage-car" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 167.83 55.332" version="1.0">
                 <g transform="translate(-227.51 -167.55)">

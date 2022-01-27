@@ -9,6 +9,10 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   }
+  blocked: {
+    value: boolean;
+    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 };
 
 
@@ -17,11 +21,12 @@ export default function ButtonsAB(props: Props) {
   const handleStart = () => {
     props.startEngine(props.i)
     setEngineIsActive(true)
+    props.blocked.setValue(true)
   }
   const handleStop = () => {
     props.stopCar(props.i)
     setEngineIsActive(false)
-
+    props.blocked.setValue(false)
   }
   return (
     <div className="garage-item-control-block">
