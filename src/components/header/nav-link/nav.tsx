@@ -8,15 +8,15 @@ type Props = {
   activePage: {
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
-  }
+  };
   engineIsActiveGlobal: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+  };
   isWinner: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+  };
 };
 
 export default function Nav(props: Props) {

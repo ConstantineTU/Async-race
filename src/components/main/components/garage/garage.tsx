@@ -1,70 +1,72 @@
 import * as React from 'react';
 import { Dispatch, useState, SetStateAction, useEffect, useRef } from 'react';
-import Options from './components/options'
-import Tracks from './components/tracks'
-import TracksTitle from './components/tracks-title'
+import Options from './components/options';
+import Tracks from './components/tracks';
+import TracksTitle from './components/tracks-title';
 import ModalWinner from './components/modal-winner';
-import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../type'
+import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../type';
 import './garage.scss';
 
 type Props = {
   carData: {
     value: carDataType;
     setValue: React.Dispatch<React.SetStateAction<carDataType>>;
-  }
-  fetchCars: () => void
-  carCount: stringReactType
-  pageCount: numberReactType
-  page: numberReactType
+  };
+  fetchCars: () => void;
+  carCount: stringReactType;
+  pageCount: numberReactType;
+  page: numberReactType;
   winner: {
     value: winnerType;
     setValue: React.Dispatch<React.SetStateAction<winnerType>>;
-  }
+  };
   isWinner: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+  };
   engineIsActiveGlobal: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+  };
   blocked: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  }
-  textCreate: stringReactType
-  colorCreate: stringReactType
-  textUpdate: stringReactType
-  colorUpdate: stringReactType
-  activePage: stringReactType
+  };
+  textCreate: stringReactType;
+  colorCreate: stringReactType;
+  textUpdate: stringReactType;
+  colorUpdate: stringReactType;
+  activePage: stringReactType;
 };
 
-
 export default function Garage(props: Props) {
-  const inputCreateRef = useRef<HTMLInputElement | null>(null)
-  const btnRaceRef = useRef<HTMLButtonElement | null>(null)
-  const btnResetRef = useRef<HTMLButtonElement | null>(null)
-  const btnPrevRef = useRef<HTMLButtonElement | null>(null)
-  const btnNextRef = useRef<HTMLButtonElement | null>(null)
+  const inputCreateRef = useRef<HTMLInputElement | null>(null);
+  const btnRaceRef = useRef<HTMLButtonElement | null>(null);
+  const btnResetRef = useRef<HTMLButtonElement | null>(null);
+  const btnPrevRef = useRef<HTMLButtonElement | null>(null);
+  const btnNextRef = useRef<HTMLButtonElement | null>(null);
 
-
-  const [isDriveActive, setIsDriveActive] = useState<boolean>(false)
+  const [isDriveActive, setIsDriveActive] = useState<boolean>(false);
   const [carSelectUpdate, setCarSelectUpdate] = useState<carSelectType>({
     name: '',
     color: '#000000',
     id: 0,
-  })
+  });
   return (
     <div className="garage" id="garage">
-      <div className='garage-container'>
-        <TracksTitle carCount={props.carCount} pageCount={props.pageCount} page={props.page}
+      <div className="garage-container">
+        <TracksTitle
+          carCount={props.carCount}
+          pageCount={props.pageCount}
+          page={props.page}
           engineIsActiveGlobal={props.engineIsActiveGlobal}
           winner={props.winner}
           btnPrevRef={btnPrevRef}
           btnNextRef={btnNextRef}
           blocked={props.blocked}
         />
-        <Options fetchCars={props.fetchCars}
+        <Options
+          fetchCars={props.fetchCars}
           carSelectUpdate={{ value: carSelectUpdate, setValue: setCarSelectUpdate }}
           inputCreateRef={inputCreateRef}
           btnRaceRef={btnRaceRef}
