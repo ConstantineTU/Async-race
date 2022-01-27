@@ -187,10 +187,10 @@ export default function Tracks(props: Props) {
       {props.carData.value.map((el, i) => (
         <div className="garage-item" key={i}>
           <div className="garage-item-top">
-            <button className=" btn-small" onClick={() => selectCar(i)}>
+            <button disabled={props.blocked.value} className=" btn-small" onClick={() => selectCar(i)}>
               select
             </button>
-            <button className=" btn-small" onClick={() => deleteCar(i)}>
+            <button disabled={props.blocked.value} className=" btn-small" onClick={() => deleteCar(i)}>
               remove
             </button>
             <span className="">{el.name}</span>

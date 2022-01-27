@@ -45,7 +45,7 @@ const App: FC = () => {
       .then((res) => getHeader(res))
       .then((res) => res.json())
       .then((result) => setCarData(result))
-      .catch((err) => console.log('error: function fetchCars'));
+      .catch((err) => console.log('error: function fetchCars', err));
   };
   useEffect(() => {
     fetchCars();
