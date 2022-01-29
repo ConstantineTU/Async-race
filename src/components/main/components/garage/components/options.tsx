@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { FC, useEffect } from 'react';
-import { stringReactType, carSelectType, winnerType } from '../../../../../type';
+import { StringReactType, CarSelectType, WinnerType } from '../../../../../type';
 import carBrandsData from '../../../../../assets/data/brands-cars';
 import carModelsData from '../../../../../assets/data/models-cars';
 
 type Props = {
   fetchCars: () => void;
   carSelectUpdate: {
-    value: carSelectType;
-    setValue: React.Dispatch<React.SetStateAction<carSelectType>>;
+    value: CarSelectType;
+    setValue: React.Dispatch<React.SetStateAction<CarSelectType>>;
   };
   inputCreateRef: React.MutableRefObject<HTMLInputElement | null>;
   btnRaceRef: React.MutableRefObject<HTMLButtonElement | null>;
@@ -18,18 +18,18 @@ type Props = {
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
   winner: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: WinnerType;
+    setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
   blocked: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
-  textCreate: stringReactType;
-  colorCreate: stringReactType;
-  textUpdate: stringReactType;
-  colorUpdate: stringReactType;
-  activePage: stringReactType;
+  textCreate: StringReactType;
+  colorCreate: StringReactType;
+  textUpdate: StringReactType;
+  colorUpdate: StringReactType;
+  activePage: StringReactType;
 };
 
 const Options: FC<Props> = (props: Props) => {

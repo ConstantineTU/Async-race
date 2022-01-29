@@ -1,10 +1,13 @@
-import React, { Fragment, useState, useEffect, FC } from 'react';
+import React, { Fragment, useState, useEffect, FC, useRef } from 'react';
 import Header from '../header/header';
 import Main from '../main/main';
 import Footer from '../footer/footer';
-import { carDataType, winnersType } from '../../type';
+import { CarDataType, WinnersType } from '../../type';
 
 const App: FC = () => {
+  const btnWinners = useRef<HTMLLIElement | null>(null);
+  const btnGarage = useRef<HTMLLIElement | null>(null);
+
   const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false);
   const [isWinner, setIsWinner] = useState<boolean>(false);
   const [activePage, setActivePage] = useState<string>(() => {
@@ -21,7 +24,7 @@ const App: FC = () => {
   const [page, setPage] = useState<number>(1);
   const [carCount, setCarCount] = useState<string>('0');
   const [pageCount, setPageCount] = useState<number>(1);
-  const [carData, setCarData] = useState<carDataType>([
+  const [carData, setCarData] = useState<CarDataType>([
     {
       name: '',
       color: '',
@@ -31,7 +34,7 @@ const App: FC = () => {
 
   const getHeader = (res: Response) => {
     const carCountJson = res.headers.get('X-Total-Count');
-    carCountJson !== null && setCarCount(carCountJson);
+    if (carCountJson) setCarCount(carCountJson);
     if (carCount !== null && carCount !== undefined && Number(carCount) < 7) {
       setPage(1);
     }
@@ -47,10 +50,7 @@ const App: FC = () => {
       .then((result) => setCarData(result))
       .catch((err) => console.log('error: function fetchCars', err));
   };
-  useEffect(() => {
-    fetchCars();
-    fetchWinners();
-  }, [activePage]);
+
   useEffect(() => {
     setPageCount(Math.ceil(Number(carCount) / 7));
   }, [carData]);
@@ -65,18 +65,10 @@ const App: FC = () => {
   const [carCountWinners, setCarCountWinners] = useState<string>('0');
 
   const [pageCountWinners, setPageCountWinners] = useState<number>(1);
-  const [carDataWinners, setCarDataWinners] = useState<winnersType>([
-    {
-      name: '',
-      color: '',
-      id: 0,
-      wins: 0,
-      time: 0,
-    },
-  ]);
+  const [carDataWinners, setCarDataWinners] = useState<Array<WinnersType>>([]);
   const getHeaderWinners = (res: Response) => {
     const carCountJson = res.headers.get('X-Total-Count');
-    carCountJson !== null && setCarCountWinners(carCountJson);
+    if (carCountJson) setCarCountWinners(carCountJson);
     if (carCountWinners !== null && carCountWinners !== undefined && Number(carCountWinners) < 7) {
       setPageWinners('1');
     }
@@ -92,20 +84,21 @@ const App: FC = () => {
     })
       .then((res) => getHeaderWinners(res))
       .then((res) => res.json())
-      .then((res) =>
-        res.map((el: { id: number; wins: number; time: number }) => {
-          return fetch(`http://127.0.0.1:3000/garage/${el.id}`, {
-            method: 'GET',
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              res.wins = el.wins;
-              res.time = el.time;
-              return res;
-            });
-        })
+      .then((res: [{ id: number; wins: number; time: number }]) =>
+        res.map(
+          (el: { id: number; wins: number; time: number }): Promise<WinnersType> => {
+            return fetch(`http://127.0.0.1:3000/garage/${el.id}`, {
+              method: 'GET',
+            })
+              .then((result) => result.json())
+              .then((result: { id: number; name: string; color: string }) => {
+                const newResult: WinnersType = { ...result, ...el };
+                return newResult;
+              });
+          }
+        )
       )
-      .then((res: winnersType) => Promise.all(res))
+      .then((res: Promise<WinnersType>[]) => Promise.all(res))
       .then((result) => setCarDataWinners(result))
       .catch((err) => console.log('error: function fetchWinners', err));
   };
@@ -118,6 +111,10 @@ const App: FC = () => {
   useEffect(() => {
     fetchWinners();
   }, [pageWinners]);
+  useEffect(() => {
+    fetchCars();
+    fetchWinners();
+  }, [activePage]);
 
   return (
     <Fragment>
@@ -125,6 +122,8 @@ const App: FC = () => {
         activePage={{ value: activePage, setValue: setActivePage }}
         engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
         isWinner={{ value: isWinner, setValue: setIsWinner }}
+        btnWinners={btnWinners}
+        btnGarage={btnGarage}
       />
       <Main
         activePage={{ value: activePage, setValue: setActivePage }}
@@ -140,6 +139,8 @@ const App: FC = () => {
         pageWinners={{ value: pageWinners, setValue: setPageWinners }}
         pageCountWinners={{ value: pageCountWinners, setValue: setPageCountWinners }}
         engineIsActiveGlobal={{ value: engineIsActiveGlobal, setValue: setEngineIsActiveGlobal }}
+        btnWinners={btnWinners}
+        btnGarage={btnGarage}
       />
       <Footer />
     </Fragment>

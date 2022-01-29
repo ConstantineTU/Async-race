@@ -24,7 +24,7 @@ export type WinnerType = {
   time: number;
   position: number;
 };
-export type WinnersType = [
+export type WinnersType =
   {
     name: string;
     color: string;
@@ -32,7 +32,7 @@ export type WinnersType = [
     wins: number;
     time: number;
   }
-];
+  ;
 export type StringReactType = {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;

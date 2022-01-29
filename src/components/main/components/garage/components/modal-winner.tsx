@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { winnerType } from '../../../../../type';
+import { WinnerType } from '../../../../../type';
 
 type Props = {
   winner: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: WinnerType;
+    setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
 };
 

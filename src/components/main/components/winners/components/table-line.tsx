@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { carDataType, stringReactType, numberReactType } from '../../../../../type';
+import { CarDataType, StringReactType, NumberReactType } from '../../../../../type';
 
 type Props = {
   fetchWinners: (sortDefault?: string, orderDefault?: string) => void;
-  carCountWinners: stringReactType;
-  pageWinners: stringReactType;
-  pageCountWinners: numberReactType;
+  carCountWinners: StringReactType;
+  pageWinners: StringReactType;
+  pageCountWinners: NumberReactType;
   carData: {
-    value: carDataType;
-    setValue: React.Dispatch<React.SetStateAction<carDataType>>;
+    value: CarDataType;
+    setValue: React.Dispatch<React.SetStateAction<CarDataType>>;
   };
   el: {
     name: string;

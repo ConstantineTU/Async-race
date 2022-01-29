@@ -4,21 +4,21 @@ import Options from './components/options';
 import Tracks from './components/tracks';
 import TracksTitle from './components/tracks-title';
 import ModalWinner from './components/modal-winner';
-import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../type';
+import { CarDataType, StringReactType, NumberReactType, CarSelectType, WinnerType } from '../../../../type';
 import './garage.scss';
 
 type Props = {
   carData: {
-    value: carDataType;
-    setValue: React.Dispatch<React.SetStateAction<carDataType>>;
+    value: CarDataType;
+    setValue: React.Dispatch<React.SetStateAction<CarDataType>>;
   };
   fetchCars: () => void;
-  carCount: stringReactType;
-  pageCount: numberReactType;
-  page: numberReactType;
+  carCount: StringReactType;
+  pageCount: NumberReactType;
+  page: NumberReactType;
   winner: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: WinnerType;
+    setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
   isWinner: {
     value: boolean;
@@ -32,11 +32,13 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
-  textCreate: stringReactType;
-  colorCreate: stringReactType;
-  textUpdate: stringReactType;
-  colorUpdate: stringReactType;
-  activePage: stringReactType;
+  textCreate: StringReactType;
+  colorCreate: StringReactType;
+  textUpdate: StringReactType;
+  colorUpdate: StringReactType;
+  activePage: StringReactType;
+  btnWinners: React.MutableRefObject<HTMLLIElement | null>;
+  btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
 
 const Garage: FC<Props> = (props: Props) => {
@@ -47,7 +49,7 @@ const Garage: FC<Props> = (props: Props) => {
   const btnNextRef = useRef<HTMLButtonElement | null>(null);
 
   const [isDriveActive, setIsDriveActive] = useState<boolean>(false);
-  const [carSelectUpdate, setCarSelectUpdate] = useState<carSelectType>({
+  const [carSelectUpdate, setCarSelectUpdate] = useState<CarSelectType>({
     name: '',
     color: '#000000',
     id: 0,
@@ -96,6 +98,8 @@ const Garage: FC<Props> = (props: Props) => {
         winner={props.winner}
         isWinner={props.isWinner}
         blocked={props.blocked}
+        btnWinners={props.btnWinners}
+        btnGarage={props.btnGarage}
       />
       {props.isWinner.value && props.engineIsActiveGlobal.value && <ModalWinner winner={props.winner} />}
     </div>

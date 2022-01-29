@@ -17,12 +17,20 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
+  btnWinners: React.MutableRefObject<HTMLLIElement | null>;
+  btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
 
 const Header: FC<Props> = (props: Props) => {
   return (
     <header id="Top" className="header">
-      <Nav activePage={props.activePage} engineIsActiveGlobal={props.engineIsActiveGlobal} isWinner={props.isWinner} />
+      <Nav
+        activePage={props.activePage}
+        engineIsActiveGlobal={props.engineIsActiveGlobal}
+        isWinner={props.isWinner}
+        btnWinners={props.btnWinners}
+        btnGarage={props.btnGarage}
+      />
     </header>
   );
 };

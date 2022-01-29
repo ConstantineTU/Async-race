@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { FC, useEffect } from 'react';
 import redFlag from '../../../../../assets/img/red-flag.svg';
-import { carDataType, numberReactType, carSelectType, winnerType } from '../../../../../type';
+import { CarDataType, NumberReactType, CarSelectType, WinnerType } from '../../../../../type';
 import ButtonsAB from './tracks-component/buttons-a-b';
 
 type Props = {
   carData: {
-    value: carDataType;
-    setValue: React.Dispatch<React.SetStateAction<carDataType>>;
+    value: CarDataType;
+    setValue: React.Dispatch<React.SetStateAction<CarDataType>>;
   };
   carSelectUpdate: {
-    value: carSelectType;
-    setValue: React.Dispatch<React.SetStateAction<carSelectType>>;
+    value: CarSelectType;
+    setValue: React.Dispatch<React.SetStateAction<CarSelectType>>;
   };
   inputCreateRef: React.MutableRefObject<HTMLInputElement | null>;
   fetchCars: () => void;
@@ -21,14 +21,14 @@ type Props = {
   };
   btnRaceRef: React.MutableRefObject<HTMLButtonElement | null>;
   btnResetRef: React.MutableRefObject<HTMLButtonElement | null>;
-  page: numberReactType;
+  page: NumberReactType;
   engineIsActiveGlobal: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
   winner: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: WinnerType;
+    setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
   isWinner: {
     value: boolean;
@@ -40,11 +40,14 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
+  btnWinners: React.MutableRefObject<HTMLLIElement | null>;
+  btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
 
 const Tracks: FC<Props> = (props: Props) => {
+  let wunnir = false;
   const selectCar = (i: number) => {
-    props.inputCreateRef.current && props.inputCreateRef.current.focus();
+    if (props.inputCreateRef.current) props.inputCreateRef.current.focus();
     props.carSelectUpdate.setValue({
       name: props.carData.value[i].name,
       color: props.carData.value[i].color,
@@ -90,7 +93,7 @@ const Tracks: FC<Props> = (props: Props) => {
   };
   const getWinner = (res: number, i: number, winnerTime = 0) => {
     if (res === 500) stopEngine(i);
-    else if (res === 200 && props.isWinner.value === false && winnerTime && props.engineIsActiveGlobal.value) {
+    else if (res === 200 && !wunnir) {
       props.winner.setValue({
         name: props.carData.value[i].name,
         color: props.carData.value[i].color,
@@ -98,11 +101,11 @@ const Tracks: FC<Props> = (props: Props) => {
         time: winnerTime,
         position: i,
       });
-      props.isWinner.value = true;
+      wunnir = true;
       props.isWinner.setValue(true);
     }
   };
-  const driveCar = (winnerTime = 0, i: number) => {
+  const driveCar = (winnerTime: number, i: number) => {
     fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=drive`, {
       method: 'PATCH',
     })
@@ -118,13 +121,6 @@ const Tracks: FC<Props> = (props: Props) => {
       .then(() => driveCar(0, i))
       .catch((err) => console.log('error: function startEngine', err));
   };
-  const stopCar = (i: number) => {
-    fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=stopped`, {
-      method: 'PATCH',
-    })
-      .then(() => getStartPosition(i))
-      .catch((err) => console.log('error: function startEngine', err));
-  };
   const getStartPosition = (i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
     if (carDrive) {
@@ -134,22 +130,30 @@ const Tracks: FC<Props> = (props: Props) => {
       carDrive.style.transform = `translateY(9px)`;
     }
   };
+  const stopCar = (i: number) => {
+    fetch(`http://127.0.0.1:3000/engine?id=${props.carData.value[i].id}&status=stopped`, {
+      method: 'PATCH',
+    })
+      .then(() => getStartPosition(i))
+      .catch((err) => console.log('error: function startEngine', err));
+  };
   const startRace = () => {
     props.engineIsActiveGlobal.setValue(true);
-    props.engineIsActiveGlobal.value = true;
-    props.carData.value
-      .map((el) =>
+    Promise.all(
+      props.carData.value.map((el) =>
         fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=started`, {
           method: 'PATCH',
         })
       )
-      .map((el, i) =>
+    ).then((res) =>
+      res.map((el, i) =>
         el
-          .then((res) => res.json())
+          .json()
           .then((result) => addDataCar(result, i))
           .then((winnerTime) => driveCar(Number(winnerTime), i))
           .catch((err) => console.log('error: function startRace', err))
-      );
+      )
+    );
   };
   const stopRace = () => {
     Promise.all(
@@ -164,20 +168,22 @@ const Tracks: FC<Props> = (props: Props) => {
           .json()
           .then(() => getStartPosition(i))
           .then(() => {
+            wunnir = false;
             props.engineIsActiveGlobal.setValue(false);
-            props.engineIsActiveGlobal.value = false;
             props.isWinner.setValue(false);
-            props.isWinner.value = false;
           })
           .catch((err) => console.log('error: function stopRace', err))
       )
     );
   };
   useEffect(() => {
-    if (props.btnRaceRef.current) props.btnRaceRef.current.onclick = () => startRace();
+    if (props.btnRaceRef.current) props.btnRaceRef.current.onclick = startRace; // eslint-disable-line
   }, [props.page]);
   useEffect(() => {
-    if (props.btnResetRef.current) props.btnResetRef.current.onclick = () => stopRace();
+    if (props.btnResetRef.current && props.btnWinners.current) {
+      props.btnWinners.current.onclick = stopRace; // eslint-disable-line
+      props.btnResetRef.current.onclick = stopRace; // eslint-disable-line
+    }
   }, [props.page]);
   return (
     <div>

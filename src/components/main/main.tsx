@@ -1,30 +1,29 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './main.scss';
-import { carDataType, stringReactType, numberReactType, winnersType } from '../../type';
+import { CarDataType, StringReactType, NumberReactType, WinnersType } from '../../type';
 
-import Home from './components/home/home';
 import Garage from './components/garage/garage';
 import Winners from './components/winners/winners';
 
 type Props = {
-  activePage: stringReactType;
+  activePage: StringReactType;
   carData: {
-    value: carDataType;
-    setValue: React.Dispatch<React.SetStateAction<carDataType>>;
+    value: CarDataType;
+    setValue: React.Dispatch<React.SetStateAction<CarDataType>>;
   };
   fetchCars: (sortDefault?: string, orderDefault?: string) => void;
-  carCount: stringReactType;
-  pageCount: numberReactType;
-  page: numberReactType;
+  carCount: StringReactType;
+  pageCount: NumberReactType;
+  page: NumberReactType;
   carDataWinners: {
-    value: winnersType;
-    setValue: React.Dispatch<React.SetStateAction<winnersType>>;
+    value: WinnersType[];
+    setValue: React.Dispatch<React.SetStateAction<WinnersType[]>>;
   };
   fetchWinners: () => void;
-  carCountWinners: stringReactType;
-  pageWinners: stringReactType;
-  pageCountWinners: numberReactType;
+  carCountWinners: StringReactType;
+  pageWinners: StringReactType;
+  pageCountWinners: NumberReactType;
   engineIsActiveGlobal: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,6 +32,8 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
+  btnWinners: React.MutableRefObject<HTMLLIElement | null>;
+  btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
 
 export default function Main(props: Props) {
@@ -45,26 +46,17 @@ export default function Main(props: Props) {
     time: 0,
     position: -1,
   });
-  useEffect(() => {
-    if (winner.time) addWinner();
-  }, [winner]);
-  useEffect(() => {
-    if (isWinner) {
-      setTimeout(() => {
-        setIsWinner(false);
-      }, 5000);
-    }
-  }, [isWinner]);
 
-  const getWins = (res: number) => {
-    if (res === 500) {
+  const getWins = (status: number) => {
+    if (status === 500) {
       return fetch(`http://127.0.0.1:3000/winners/${winner.id}`, {
         method: 'GET',
       })
         .then((res) => res.json())
-        .then((res) => updateWinner(res))
+        .then((res) => updateWinner(res)) // eslint-disable-line
         .catch((err) => console.log('error: function getWins', err));
     }
+    return null;
   };
 
   const updateWinner = (winsUpdate: { wins: number; time: number }) => {
@@ -79,8 +71,10 @@ export default function Main(props: Props) {
       }),
     })
       .then((result) => getWins(result.status))
+      .then(props.fetchWinners)
       .catch((err) => console.log('error: function setWinner', err));
   };
+
   const addWinner = () => {
     fetch(`http://127.0.0.1:3000/winners/`, {
       method: 'POST',
@@ -96,6 +90,9 @@ export default function Main(props: Props) {
       .then((result) => getWins(result.status))
       .catch((err) => console.log('error: function setWinner', err));
   };
+  useEffect(() => {
+    if (winner.time && !isWinner) addWinner();
+  }, [winner]);
   const pages = ['garage', 'winners'];
 
   const [textCreate, setTextCreate] = useState<string>(() => {
@@ -132,7 +129,6 @@ export default function Main(props: Props) {
   }, [colorUpdate]);
   return (
     <main className="main" id="main">
-      {props.activePage.value === pages[0] && <Home activePage={props.activePage} />}
       {props.activePage.value === pages[0] && (
         <Garage
           carData={props.carData}
@@ -149,6 +145,8 @@ export default function Main(props: Props) {
           textUpdate={{ value: textUpdate, setValue: setTextUpdate }}
           colorUpdate={{ value: colorUpdate, setValue: setColorUpdate }}
           activePage={props.activePage}
+          btnWinners={props.btnWinners}
+          btnGarage={props.btnGarage}
         />
       )}
       {props.activePage.value === pages[1] && (

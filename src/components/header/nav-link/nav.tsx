@@ -16,6 +16,8 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
+  btnWinners: React.MutableRefObject<HTMLLIElement | null>;
+  btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
 
 const Nav: FC<Props> = (props: Props) => {
@@ -31,6 +33,8 @@ const Nav: FC<Props> = (props: Props) => {
           activePage={props.activePage}
           engineIsActiveGlobal={props.engineIsActiveGlobal}
           isWinner={props.isWinner}
+          btnWinners={props.btnWinners}
+          btnGarage={props.btnGarage}
         />
       ))}
     </ul>

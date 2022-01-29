@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { stringReactType, numberReactType, winnerType } from '../../../../../type';
+import { StringReactType, NumberReactType, WinnerType } from '../../../../../type';
 
 type Props = {
-  pageCount: numberReactType;
-  page: numberReactType;
-  carCount: stringReactType;
+  pageCount: NumberReactType;
+  page: NumberReactType;
+  carCount: StringReactType;
   engineIsActiveGlobal: {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
   winner: {
-    value: winnerType;
-    setValue: React.Dispatch<React.SetStateAction<winnerType>>;
+    value: WinnerType;
+    setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
   btnPrevRef: React.MutableRefObject<HTMLButtonElement | null>;
   btnNextRef: React.MutableRefObject<HTMLButtonElement | null>;

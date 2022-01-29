@@ -17,6 +17,8 @@ type Props = {
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
   };
+  btnWinners: React.MutableRefObject<HTMLLIElement | null>;
+  btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
 
 const NavItem: FC<Props> = (props: Props) => {
@@ -25,7 +27,7 @@ const NavItem: FC<Props> = (props: Props) => {
   };
 
   return (
-    <li className="nav__item">
+    <li className="nav__item" ref={props.pageName === 'winners' ? props.btnWinners : props.btnGarage}>
       <a className={props.active ? 'nav__link active' : 'nav__link'} href={`#${props.pageName}`} onClick={handleChange}>
         {props.pageName.toUpperCase()}
       </a>

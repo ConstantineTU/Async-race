@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { useState, FC } from 'react';
 import './winners.scss';
-import { carDataType, stringReactType, numberReactType, winnersType } from '../../../../type';
+import { CarDataType, StringReactType, NumberReactType, WinnersType } from '../../../../type';
 import TableLine from './components/table-line';
 
 type Props = {
   fetchWinners: (sortDefault?: string, orderDefault?: string) => void;
-  carCountWinners: stringReactType;
-  pageWinners: stringReactType;
-  pageCountWinners: numberReactType;
+  carCountWinners: StringReactType;
+  pageWinners: StringReactType;
+  pageCountWinners: NumberReactType;
   carDataWinners: {
-    value: winnersType;
-    setValue: React.Dispatch<React.SetStateAction<winnersType>>;
+    value: WinnersType[];
+    setValue: React.Dispatch<React.SetStateAction<WinnersType[]>>;
   };
   carData: {
-    value: carDataType;
-    setValue: React.Dispatch<React.SetStateAction<carDataType>>;
+    value: CarDataType;
+    setValue: React.Dispatch<React.SetStateAction<CarDataType>>;
   };
 };
 
@@ -108,15 +108,18 @@ const Winners: FC<Props> = (props: Props) => {
             <tr>
               <th>№</th>
               <th className="winners-sort-button" onClick={() => handleChange('id')}>
-                ID {id ? '↓' : id === false ? '↑' : false}
+                ID {id ? '↓' : false}
+                {id === false ? '↑' : false}
               </th>
               <th>CAR</th>
               <th>NAME</th>
               <th className="winners-sort-button" onClick={() => handleChange('wins')}>
-                WINS {wins ? '↓' : wins === false ? '↑' : false}
+                WINS {wins ? '↓' : false}
+                {wins === false ? '↑' : false}
               </th>
               <th className="winners-sort-button" onClick={() => handleChange('time')}>
-                BEST TIME {time ? '↓' : time === false ? '↑' : false}
+                BEST TIME {time ? '↓' : false}
+                {time === false ? '↑' : false}
               </th>
             </tr>
           </thead>
