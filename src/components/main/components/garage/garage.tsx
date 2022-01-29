@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect, useRef } from 'react';
+import { useState, FC, useRef } from 'react';
 import Options from './components/options';
 import Tracks from './components/tracks';
 import TracksTitle from './components/tracks-title';
@@ -39,7 +39,7 @@ type Props = {
   activePage: stringReactType;
 };
 
-export default function Garage(props: Props) {
+const Garage: FC<Props> = (props: Props) => {
   const inputCreateRef = useRef<HTMLInputElement | null>(null);
   const btnRaceRef = useRef<HTMLButtonElement | null>(null);
   const btnResetRef = useRef<HTMLButtonElement | null>(null);
@@ -100,4 +100,6 @@ export default function Garage(props: Props) {
       {props.isWinner.value && props.engineIsActiveGlobal.value && <ModalWinner winner={props.winner} />}
     </div>
   );
-}
+};
+
+export default Garage;

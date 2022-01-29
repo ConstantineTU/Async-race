@@ -1,42 +1,44 @@
-export type carDataType = [{
-  name: string,
-  color: string,
-  id: number,
-}];
-export type carDataWinType = [{
-  id: number,
-  wins: number,
-  time: number,
-}];
-export type carSelectType = {
-  name: string,
-  color: string,
-  id: number,
+export type CarDataType = [
+  {
+    name: string;
+    color: string;
+    id: number;
+  }
+];
+export type CarDataWinType = [
+  {
+    id: number;
+    wins: number;
+    time: number;
+  }
+];
+export type CarSelectType = {
+  name: string;
+  color: string;
+  id: number;
 };
-export type winnerType = {
-
+export type WinnerType = {
   name: string;
   color: string;
   id: number;
   time: number;
   position: number;
-
-}
-export type winnersType = [{
-
-  name: string;
-  color: string;
-  id: number;
-  wins: number;
-  time: number;
-
-}]
-export type stringReactType = {
+};
+export type WinnersType = [
+  {
+    name: string;
+    color: string;
+    id: number;
+    wins: number;
+    time: number;
+  }
+];
+export type StringReactType = {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
-}
+};
 
-export type numberReactType = {
+export type NumberReactType = {
   value: number;
   setValue: React.Dispatch<React.SetStateAction<number>>;
-}
+};

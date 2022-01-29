@@ -49,6 +49,6 @@ const modelsCars: Array<string> = [
   '911',
   'Cayenne',
   'FX37',
-]
+];
 
-export default modelsCars
+export default modelsCars;

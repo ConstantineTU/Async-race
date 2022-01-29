@@ -49,6 +49,6 @@ const brandsCars: Array<string> = [
   'Chevrolet',
   'Mazzanti',
   'Daewoo',
-]
+];
 
-export default brandsCars
+export default brandsCars;

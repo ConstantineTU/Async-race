@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect, FC } from 'react';
 import Header from '../header/header';
 import Main from '../main/main';
 import Footer from '../footer/footer';
-import { carDataType, carDataWinType, winnersType } from '../../type';
+import { carDataType, winnersType } from '../../type';
 
 const App: FC = () => {
   const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false);

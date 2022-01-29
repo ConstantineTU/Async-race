@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
+import { FC, useState } from 'react';
 
 type Props = {
   i: number;
@@ -15,7 +15,7 @@ type Props = {
   };
 };
 
-export default function ButtonsAB(props: Props) {
+const ButtonsAB: FC<Props> = (props: Props) => {
   const [engineIsActive, setEngineIsActive] = useState<boolean>(false);
   const handleStart = () => {
     props.startEngine(props.i);
@@ -32,17 +32,15 @@ export default function ButtonsAB(props: Props) {
       <button
         className="btn-small"
         onClick={handleStart}
-        disabled={props.engineIsActiveGlobal.value || (engineIsActive ? true : false)}
+        disabled={props.engineIsActiveGlobal.value || !!engineIsActive}
       >
         A
       </button>
-      <button
-        className="btn-small"
-        onClick={handleStop}
-        disabled={props.engineIsActiveGlobal.value || (engineIsActive ? false : true)}
-      >
+      <button className="btn-small" onClick={handleStop} disabled={props.engineIsActiveGlobal.value || !engineIsActive}>
         B
       </button>
     </div>
   );
-}
+};
+
+export default ButtonsAB;

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
+import { useState, FC } from 'react';
 import './winners.scss';
-import { carDataType, stringReactType, numberReactType, carDataWinType, winnersType } from '../../../../type';
+import { carDataType, stringReactType, numberReactType, winnersType } from '../../../../type';
 import TableLine from './components/table-line';
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
   };
 };
 
-export default function Winners(props: Props) {
+const Winners: FC<Props> = (props: Props) => {
   const [id, setId] = useState<boolean | null>(null);
   const [wins, setWins] = useState<boolean | null>(null);
   const [time, settime] = useState<boolean | null>(null);
@@ -59,8 +59,7 @@ export default function Winners(props: Props) {
 
     if (id || wins || time) {
       props.fetchWinners(prop, 'DESC');
-    }
-    if (!id && !wins && !time) props.fetchWinners(prop, 'ASC');
+    } else if (!id && !wins && !time) props.fetchWinners(prop, 'ASC');
   };
   const nextPage = () => {
     if (props.pageCountWinners.value > Number(props.pageWinners.value)) {
@@ -139,4 +138,6 @@ export default function Winners(props: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default Winners;

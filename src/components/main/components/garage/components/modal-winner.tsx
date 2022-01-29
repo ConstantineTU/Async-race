@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
-import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../../type';
+import { FC } from 'react';
+import { winnerType } from '../../../../../type';
 
 type Props = {
   winner: {
@@ -9,14 +9,18 @@ type Props = {
   };
 };
 
-export default function ModalWinner(props: Props) {
+const ModalWinner: FC<Props> = (props: Props) => {
+  const indexCorrection = 1;
+
   return (
     <div className="garage-modal-container">
       <h3 className="garage-modal-title">WINNER</h3>
       <div>Time: {props.winner.value.time} s</div>
       <div>Car name: {props.winner.value.name}</div>
       <div>ID: {props.winner.value.id}</div>
-      <div>Position: {props.winner.value.position + 1}</div>
+      <div>Position: {props.winner.value.position + indexCorrection}</div>
     </div>
   );
-}
+};
+
+export default ModalWinner;

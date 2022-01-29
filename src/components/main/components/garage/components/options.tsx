@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect, MouseEventHandler } from 'react';
-import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../../type';
+import { FC, useEffect } from 'react';
+import { stringReactType, carSelectType, winnerType } from '../../../../../type';
 import carBrandsData from '../../../../../assets/data/brands-cars';
 import carModelsData from '../../../../../assets/data/models-cars';
 
@@ -32,14 +32,14 @@ type Props = {
   activePage: stringReactType;
 };
 
-export default function Options(props: Props) {
+const Options: FC<Props> = (props: Props) => {
   const generateName = () => {
     const brand = carBrandsData[Math.round(((carBrandsData.length - 1) / 100) * Math.round(Math.random() * 100))];
     const model = carModelsData[Math.round(((carModelsData.length - 1) / 100) * Math.round(Math.random() * 100))];
     return `${brand} ${model}`;
   };
   const generateColor = () => {
-    return '#' + (Math.random().toString(16) + '000000').substring(2, 8).toUpperCase();
+    return `#${`${Math.random().toString(16)}000000`.substring(2, 8).toUpperCase()}`;
   };
   const generateCar = () => {
     for (let i = 0; i < 100; i += 1) {
@@ -54,7 +54,7 @@ export default function Options(props: Props) {
         }),
       })
         .then(props.fetchCars)
-        .catch((err) => console.log('error: function createCar'));
+        .catch((err) => console.log('error: function createCar', err));
     }
   };
   const createCar = () => {
@@ -72,7 +72,7 @@ export default function Options(props: Props) {
         }),
       })
         .then(props.fetchCars)
-        .catch((err) => console.log('error: function createCar'));
+        .catch((err) => console.log('error: function createCar', err));
     } else {
       window.alert('Input car name!');
     }
@@ -99,7 +99,7 @@ export default function Options(props: Props) {
           });
           return props.fetchCars();
         })
-        .catch((err) => console.log('error: function updateCar'));
+        .catch((err) => console.log('error: function updateCar', err));
     } else {
       window.alert('Input car name to update!');
     }
@@ -162,20 +162,16 @@ export default function Options(props: Props) {
           id="garage-input-update"
           className=" garage-input update"
           type="text"
-          disabled={props.carSelectUpdate.value.id ? false : true}
+          disabled={!props.carSelectUpdate.value.id}
         ></input>
         <input
           onChange={changeColorUpdate}
           id="garage-color-update"
           className=" garage-color-input"
           type="color"
-          disabled={props.carSelectUpdate.value.id ? false : true}
+          disabled={!props.carSelectUpdate.value.id}
         ></input>
-        <button
-          className="btn garage-button"
-          disabled={props.carSelectUpdate.value.id ? false : true}
-          onClick={updateCar}
-        >
+        <button className="btn garage-button" disabled={!props.carSelectUpdate.value.id} onClick={updateCar}>
           update
         </button>
       </div>
@@ -183,14 +179,14 @@ export default function Options(props: Props) {
         <button
           ref={props.btnRaceRef}
           className="btn garage-race-button"
-          disabled={!props.blocked.value && !props.engineIsActiveGlobal.value ? false : true}
+          disabled={!(!props.blocked.value && !props.engineIsActiveGlobal.value)}
         >
           race
         </button>
         <button
           ref={props.btnResetRef}
           className="btn garage-reset-button"
-          disabled={props.engineIsActiveGlobal.value ? false : true}
+          disabled={!props.engineIsActiveGlobal.value}
         >
           reset
         </button>
@@ -200,4 +196,6 @@ export default function Options(props: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default Options;

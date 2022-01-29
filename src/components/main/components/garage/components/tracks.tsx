@@ -1,9 +1,7 @@
-import { Resolver } from 'dns';
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
-import { Resolve } from 'webpack';
+import { FC, useEffect } from 'react';
 import redFlag from '../../../../../assets/img/red-flag.svg';
-import { carDataType, stringReactType, numberReactType, carSelectType, winnerType } from '../../../../../type';
+import { carDataType, numberReactType, carSelectType, winnerType } from '../../../../../type';
 import ButtonsAB from './tracks-component/buttons-a-b';
 
 type Props = {
@@ -44,8 +42,7 @@ type Props = {
   };
 };
 
-export default function Tracks(props: Props) {
-  const [resetIsActiveGlobal, setResetIsActiveGlobal] = useState<boolean>(false);
+const Tracks: FC<Props> = (props: Props) => {
   const selectCar = (i: number) => {
     props.inputCreateRef.current && props.inputCreateRef.current.focus();
     props.carSelectUpdate.setValue({
@@ -64,7 +61,7 @@ export default function Tracks(props: Props) {
         })
       )
       .then(() => props.fetchCars())
-      .catch((err) => console.log('error: function updateCar'));
+      .catch((err) => console.log('error: function updateCar', err));
   };
   const addDataCar = (res: { velocity: string; distance: string }, i: number) => {
     const carDrive = document.getElementById(`${props.carData.value[i].id}`) as HTMLDivElement;
@@ -141,7 +138,7 @@ export default function Tracks(props: Props) {
     props.engineIsActiveGlobal.setValue(true);
     props.engineIsActiveGlobal.value = true;
     props.carData.value
-      .map((el, i) =>
+      .map((el) =>
         fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=started`, {
           method: 'PATCH',
         })
@@ -156,7 +153,7 @@ export default function Tracks(props: Props) {
   };
   const stopRace = () => {
     Promise.all(
-      props.carData.value.map((el, i) =>
+      props.carData.value.map((el) =>
         fetch(`http://127.0.0.1:3000/engine?id=${el.id}&status=stopped`, {
           method: 'PATCH',
         })
@@ -223,4 +220,6 @@ export default function Tracks(props: Props) {
       ))}
     </div>
   );
-}
+};
+
+export default Tracks;

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './main.scss';
-import { carDataType, stringReactType, numberReactType, carDataWinType, winnersType } from '../../type';
+import { carDataType, stringReactType, numberReactType, winnersType } from '../../type';
 
 import Home from './components/home/home';
 import Garage from './components/garage/garage';
@@ -132,7 +132,7 @@ export default function Main(props: Props) {
   }, [colorUpdate]);
   return (
     <main className="main" id="main">
-      {/* {props.activePage.value === pages[0] && <Home activePage={props.activePage} />} */}
+      {props.activePage.value === pages[0] && <Home activePage={props.activePage} />}
       {props.activePage.value === pages[0] && (
         <Garage
           carData={props.carData}

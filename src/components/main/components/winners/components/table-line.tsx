@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
-import { carDataType, stringReactType, numberReactType, carDataWinType } from '../../../../../type';
+import { FC } from 'react';
+import { carDataType, stringReactType, numberReactType } from '../../../../../type';
 
 type Props = {
   fetchWinners: (sortDefault?: string, orderDefault?: string) => void;
@@ -21,7 +21,7 @@ type Props = {
   i: number;
 };
 
-export default function Winners(props: Props) {
+const TableLine: FC<Props> = (props: Props) => {
   return (
     <tr>
       <td>{props.i + 1 + (Number(props.pageWinners.value) - 1) * 10}</td>
@@ -45,4 +45,6 @@ export default function Winners(props: Props) {
       <td>{props.el.time} s</td>
     </tr>
   );
-}
+};
+
+export default TableLine;

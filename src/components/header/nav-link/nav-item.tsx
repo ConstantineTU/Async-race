@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dispatch, SetStateAction } from 'react';
+import { FC } from 'react';
 import './nav.scss';
 
 type Props = {
@@ -19,20 +19,18 @@ type Props = {
   };
 };
 
-export default function NavItem(props: Props) {
-  const handleChange = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+const NavItem: FC<Props> = (props: Props) => {
+  const handleChange = () => {
     props.activePage.setValue(props.pageName);
   };
 
   return (
     <li className="nav__item">
-      <a
-        className={props.active ? 'nav__link active' : 'nav__link'}
-        href={`#${props.pageName}`}
-        onClick={(e) => handleChange(e)}
-      >
+      <a className={props.active ? 'nav__link active' : 'nav__link'} href={`#${props.pageName}`} onClick={handleChange}>
         {props.pageName.toUpperCase()}
       </a>
     </li>
   );
-}
+};
+
+export default NavItem;

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Dispatch, useState, SetStateAction, useEffect } from 'react';
-import { carDataType, stringReactType, numberReactType, winnerType } from '../../../../../type';
+import { FC } from 'react';
+import { stringReactType, numberReactType, winnerType } from '../../../../../type';
 
 type Props = {
   pageCount: numberReactType;
@@ -22,7 +22,7 @@ type Props = {
   };
 };
 
-export default function TracksTitle(props: Props) {
+const TracksTitle: FC<Props> = (props: Props) => {
   const nextPage = () => {
     if (props.pageCount.value > props.page.value) {
       props.page.setValue(props.page.value + 1);
@@ -48,7 +48,7 @@ export default function TracksTitle(props: Props) {
           className="btn-small btn-prev"
           onClick={prevPage}
           ref={props.btnPrevRef}
-          disabled={!props.blocked.value && !props.engineIsActiveGlobal.value && props.page.value > 1 ? false : true}
+          disabled={!(!props.blocked.value && !props.engineIsActiveGlobal.value && props.page.value > 1)}
         >
           Prev
         </button>
@@ -57,11 +57,11 @@ export default function TracksTitle(props: Props) {
           onClick={nextPage}
           ref={props.btnNextRef}
           disabled={
-            props.blocked.value ||
-            props.engineIsActiveGlobal.value ||
-            (props.pageCount.value < props.page.value && props.pageCount.value !== 1)
-              ? true
-              : false
+            !!(
+              props.blocked.value ||
+              props.engineIsActiveGlobal.value ||
+              (props.pageCount.value < props.page.value && props.pageCount.value !== 1)
+            )
           }
         >
           Next
@@ -69,4 +69,6 @@ export default function TracksTitle(props: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default TracksTitle;
