@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FC, useEffect } from 'react';
-import { StringReactType, CarSelectType, WinnerType } from '../../../../../type';
+import { StringReactType, CarSelectType, WinnerType, BooleanReactType } from '../../../../../type';
 import carBrandsData from '../../../../../assets/data/brands-cars';
 import carModelsData from '../../../../../assets/data/models-cars';
 
@@ -13,18 +13,12 @@ type Props = {
   inputCreateRef: React.MutableRefObject<HTMLInputElement | null>;
   btnRaceRef: React.MutableRefObject<HTMLButtonElement | null>;
   btnResetRef: React.MutableRefObject<HTMLButtonElement | null>;
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  engineIsActiveGlobal: BooleanReactType;
   winner: {
     value: WinnerType;
     setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
-  blocked: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  blocked: BooleanReactType;
   textCreate: StringReactType;
   colorCreate: StringReactType;
   textUpdate: StringReactType;
@@ -39,7 +33,7 @@ const Options: FC<Props> = (props: Props) => {
     return `${brand} ${model}`;
   };
   const generateColor = () => {
-    return `#${`${Math.random().toString(16)}000000`.substring(2, 8).toUpperCase()}`;
+    return `#${Math.random().toString(16)}000000`.substring(2, 8).toUpperCase();
   };
   const generateCar = () => {
     for (let i = 0; i < 100; i += 1) {

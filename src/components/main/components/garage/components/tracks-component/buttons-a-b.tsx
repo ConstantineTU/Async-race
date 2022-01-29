@@ -1,18 +1,13 @@
 import * as React from 'react';
 import { FC, useState } from 'react';
+import { BooleanReactType } from '../../../../../../type';
 
 type Props = {
   i: number;
   startEngine: (i: number) => void;
   stopCar: (i: number) => void;
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-  blocked: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  engineIsActiveGlobal: BooleanReactType;
+  blocked: BooleanReactType;
 };
 
 const ButtonsAB: FC<Props> = (props: Props) => {

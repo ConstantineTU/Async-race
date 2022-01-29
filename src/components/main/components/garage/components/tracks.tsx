@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FC, useEffect } from 'react';
 import redFlag from '../../../../../assets/img/red-flag.svg';
-import { CarDataType, NumberReactType, CarSelectType, WinnerType } from '../../../../../type';
+import { CarDataType, NumberReactType, CarSelectType, WinnerType, BooleanReactType } from '../../../../../type';
 import ButtonsAB from './tracks-component/buttons-a-b';
 
 type Props = {
@@ -15,31 +15,19 @@ type Props = {
   };
   inputCreateRef: React.MutableRefObject<HTMLInputElement | null>;
   fetchCars: () => void;
-  isDriveActive: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  isDriveActive: BooleanReactType;
   btnRaceRef: React.MutableRefObject<HTMLButtonElement | null>;
   btnResetRef: React.MutableRefObject<HTMLButtonElement | null>;
   page: NumberReactType;
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  engineIsActiveGlobal: BooleanReactType;
   winner: {
     value: WinnerType;
     setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
-  isWinner: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  isWinner: BooleanReactType;
   btnPrevRef: React.MutableRefObject<HTMLButtonElement | null>;
   btnNextRef: React.MutableRefObject<HTMLButtonElement | null>;
-  blocked: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  blocked: BooleanReactType;
   btnWinners: React.MutableRefObject<HTMLLIElement | null>;
   btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };

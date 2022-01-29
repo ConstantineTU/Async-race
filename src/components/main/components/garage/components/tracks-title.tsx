@@ -1,25 +1,19 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { StringReactType, NumberReactType, WinnerType } from '../../../../../type';
+import { StringReactType, NumberReactType, BooleanReactType, WinnerType } from '../../../../../type';
 
 type Props = {
   pageCount: NumberReactType;
   page: NumberReactType;
   carCount: StringReactType;
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  engineIsActiveGlobal: BooleanReactType;
   winner: {
     value: WinnerType;
     setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
   btnPrevRef: React.MutableRefObject<HTMLButtonElement | null>;
   btnNextRef: React.MutableRefObject<HTMLButtonElement | null>;
-  blocked: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  blocked: BooleanReactType;
 };
 
 const TracksTitle: FC<Props> = (props: Props) => {

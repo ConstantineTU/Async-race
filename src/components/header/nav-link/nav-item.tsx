@@ -1,22 +1,14 @@
 import * as React from 'react';
 import { FC } from 'react';
 import './nav.scss';
+import { StringReactType, BooleanReactType } from '../../../type';
 
 type Props = {
   pageName: string;
   active: boolean;
-  activePage: {
-    value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
-  };
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-  isWinner: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  activePage: StringReactType;
+  engineIsActiveGlobal: BooleanReactType;
+  isWinner: BooleanReactType;
   btnWinners: React.MutableRefObject<HTMLLIElement | null>;
   btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };

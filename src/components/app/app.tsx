@@ -7,7 +7,6 @@ import { CarDataType, WinnersType } from '../../type';
 const App: FC = () => {
   const btnWinners = useRef<HTMLLIElement | null>(null);
   const btnGarage = useRef<HTMLLIElement | null>(null);
-
   const [engineIsActiveGlobal, setEngineIsActiveGlobal] = useState<boolean>(false);
   const [isWinner, setIsWinner] = useState<boolean>(false);
   const [activePage, setActivePage] = useState<string>(() => {
@@ -60,10 +59,10 @@ const App: FC = () => {
   useEffect(() => {
     fetchCars();
   }, [page]);
+
   // Winners
   const [pageWinners, setPageWinners] = useState<string>('1');
   const [carCountWinners, setCarCountWinners] = useState<string>('0');
-
   const [pageCountWinners, setPageCountWinners] = useState<number>(1);
   const [carDataWinners, setCarDataWinners] = useState<Array<WinnersType>>([]);
   const getHeaderWinners = (res: Response) => {

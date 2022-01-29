@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { CarDataType, StringReactType, NumberReactType } from '../../../../../type';
+import { CarDataType, StringReactType, NumberReactType, WinnersType } from '../../../../../type';
 
 type Props = {
   fetchWinners: (sortDefault?: string, orderDefault?: string) => void;
@@ -11,13 +11,7 @@ type Props = {
     value: CarDataType;
     setValue: React.Dispatch<React.SetStateAction<CarDataType>>;
   };
-  el: {
-    name: string;
-    color: string;
-    id: number;
-    wins: number;
-    time: number;
-  };
+  el: WinnersType;
   i: number;
 };
 

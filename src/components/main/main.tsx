@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import './main.scss';
-import { CarDataType, StringReactType, NumberReactType, WinnersType } from '../../type';
+import { CarDataType, StringReactType, NumberReactType, BooleanReactType, WinnersType, WinnerType } from '../../type';
 
 import Garage from './components/garage/garage';
 import Winners from './components/winners/winners';
@@ -24,14 +24,8 @@ type Props = {
   carCountWinners: StringReactType;
   pageWinners: StringReactType;
   pageCountWinners: NumberReactType;
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-  isWinner: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  engineIsActiveGlobal: BooleanReactType;
+  isWinner: BooleanReactType;
   btnWinners: React.MutableRefObject<HTMLLIElement | null>;
   btnGarage: React.MutableRefObject<HTMLLIElement | null>;
 };
@@ -39,7 +33,7 @@ type Props = {
 export default function Main(props: Props) {
   const [isWinner, setIsWinner] = useState<boolean>(false);
   const [blocked, setBlocked] = useState<boolean>(false);
-  const [winner, setWinner] = useState({
+  const [winner, setWinner] = useState<WinnerType>({
     name: '',
     color: '',
     id: 0,
@@ -95,26 +89,17 @@ export default function Main(props: Props) {
   }, [winner]);
   const pages = ['garage', 'winners'];
 
-  const [textCreate, setTextCreate] = useState<string>(() => {
-    const saved = localStorage.getItem('textCreate');
+  const setStateLoad = (str: string) => {
+    const saved = localStorage.getItem(str);
     const initialValue = saved || undefined;
     return initialValue || '';
-  });
-  const [colorCreate, setColorCreate] = useState<string>(() => {
-    const saved = localStorage.getItem('colorCreate');
-    const initialValue = saved || undefined;
-    return initialValue || '';
-  });
-  const [textUpdate, setTextUpdate] = useState<string>(() => {
-    const saved = localStorage.getItem('textUpdate');
-    const initialValue = saved || undefined;
-    return initialValue || '';
-  });
-  const [colorUpdate, setColorUpdate] = useState<string>(() => {
-    const saved = localStorage.getItem('colorUpdate');
-    const initialValue = saved || undefined;
-    return initialValue || '';
-  });
+  };
+
+  const [textCreate, setTextCreate] = useState<string>(() => setStateLoad('textCreate'));
+  const [colorCreate, setColorCreate] = useState<string>(() => setStateLoad('colorCreate'));
+  const [textUpdate, setTextUpdate] = useState<string>(() => setStateLoad('textUpdate'));
+  const [colorUpdate, setColorUpdate] = useState<string>(() => setStateLoad('colorUpdate'));
+
   useEffect(() => {
     localStorage.setItem('textCreate', textCreate);
   }, [textCreate]);

@@ -4,7 +4,14 @@ import Options from './components/options';
 import Tracks from './components/tracks';
 import TracksTitle from './components/tracks-title';
 import ModalWinner from './components/modal-winner';
-import { CarDataType, StringReactType, NumberReactType, CarSelectType, WinnerType } from '../../../../type';
+import {
+  CarDataType,
+  StringReactType,
+  BooleanReactType,
+  NumberReactType,
+  CarSelectType,
+  WinnerType,
+} from '../../../../type';
 import './garage.scss';
 
 type Props = {
@@ -20,18 +27,9 @@ type Props = {
     value: WinnerType;
     setValue: React.Dispatch<React.SetStateAction<WinnerType>>;
   };
-  isWinner: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-  engineIsActiveGlobal: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-  blocked: {
-    value: boolean;
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  isWinner: BooleanReactType;
+  engineIsActiveGlobal: BooleanReactType;
+  blocked: BooleanReactType;
   textCreate: StringReactType;
   colorCreate: StringReactType;
   textUpdate: StringReactType;
