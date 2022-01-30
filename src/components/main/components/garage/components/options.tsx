@@ -33,7 +33,8 @@ const Options: FC<Props> = (props: Props) => {
     return `${brand} ${model}`;
   };
   const generateColor = () => {
-    return `#${Math.random().toString(16)}000000`.substring(2, 8).toUpperCase();
+    const newColor = `${Math.random().toString(16)}000000`.substring(2, 8).toUpperCase()
+    return `#${newColor}`;
   };
   const generateCar = () => {
     for (let i = 0; i < 100; i += 1) {

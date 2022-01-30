@@ -9,7 +9,7 @@ const selfTest = () => {
   console.log('	%cИтого 190 баллов из 190', 'color: green');
 
   console.log('%c Мой дискорд - https://discordapp.com/users/414360051101466624', 'color: blue');
-  console.log('%cСпасибо за проверку и успехов!', 'color: green');
+  console.log('%cСпасибо за проверку и успехов!!', 'color: green');
 
   console.groupEnd();
 };
