@@ -1,4 +1,4 @@
-# Project link [Async-race](https://constantinetu.github.io/Async-race/) 
+# Project link [Async-race](https://constantinetu-async-race.netlify.app/) 
 # (To work, you need to run a local server)
 ## (Desktop and mobile (320px) version)
 
